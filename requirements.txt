@@ -1,0 +1,8 @@
+tensorflow==2.9.0
+numpy
+pandas
+matplotlib
+Pillow
+scikit-learn
+ipython
+google-colab
