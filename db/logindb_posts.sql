@@ -30,7 +30,7 @@ CREATE TABLE `posts` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `report` tinyint DEFAULT NULL,
   PRIMARY KEY (`postnum`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,'june','첫글','11111','2024-10-02 00:00:00',NULL),(2,'chan','둘','22222222','2024-10-02 00:00:00',NULL),(3,'june','ㅇㅁㅇ','ㅁㄴㅇ','2024-10-22 16:40:44',NULL),(4,'chan','fasf','fads','2024-10-22 16:42:06',NULL);
+INSERT INTO `posts` VALUES (1,'june','첫글','11111','2024-10-02 00:00:00',NULL);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-23 19:21:34
+-- Dump completed on 2024-10-23 19:41:57
