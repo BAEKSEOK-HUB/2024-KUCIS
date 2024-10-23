@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.36, for macos14 (arm64)
+-- MySQL dump 10.13  Distrib 8.0.40, for macos14 (arm64)
 --
 -- Host: 127.0.0.1    Database: logindb
 -- ------------------------------------------------------
@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comments` (
-  `commentsID` int NOT NULL,
+  `commentsID` int NOT NULL AUTO_INCREMENT,
   `answernum` int NOT NULL,
   `comment` varchar(45) NOT NULL,
   `del` blob,
@@ -35,7 +35,7 @@ CREATE TABLE `comments` (
   `board_id` varchar(45) NOT NULL,
   `member_id` varchar(45) NOT NULL,
   PRIMARY KEY (`commentsID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,6 +44,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+INSERT INTO `comments` VALUES (1,0,'sds',NULL,'2024-10-17 13:27:00','0','1','2024-10-17 13:27:00','0','1','june'),(2,0,'dsda',NULL,'2024-10-17 13:27:03','1','1','2024-10-17 13:27:03','0','1','june'),(3,0,'ㄴ2ㄷㄴ3',NULL,'2024-10-17 13:38:57','0','2','2024-10-17 13:38:57','0','2','june'),(4,0,'ㅇㄷ3ㅇㄷ3ㅇ',NULL,'2024-10-17 13:38:59','3','2','2024-10-17 13:38:59','0','2','june'),(5,0,'ㅇ3ㅇ3ㅇㄷ',NULL,'2024-10-17 13:39:02','0','2','2024-10-17 13:39:02','0','2','june');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-08 20:19:34
+-- Dump completed on 2024-10-23 19:21:34

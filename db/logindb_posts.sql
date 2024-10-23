@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.36, for macos14 (arm64)
+-- MySQL dump 10.13  Distrib 8.0.40, for macos14 (arm64)
 --
 -- Host: 127.0.0.1    Database: logindb
 -- ------------------------------------------------------
@@ -23,13 +23,14 @@ DROP TABLE IF EXISTS `posts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `posts` (
-  `postnum` int NOT NULL DEFAULT '1',
+  `postnum` int NOT NULL AUTO_INCREMENT,
   `id` varchar(30) NOT NULL DEFAULT 'kucis',
   `title` varchar(255) NOT NULL,
   `content` text NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `report` tinyint DEFAULT NULL,
   PRIMARY KEY (`postnum`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +39,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,'june','첫글','11111','2024-10-02 00:00:00'),(2,'chan','둘','22222222','2024-10-02 00:00:00');
+INSERT INTO `posts` VALUES (1,'june','첫글','11111','2024-10-02 00:00:00',NULL),(2,'chan','둘','22222222','2024-10-02 00:00:00',NULL),(3,'june','ㅇㅁㅇ','ㅁㄴㅇ','2024-10-22 16:40:44',NULL),(4,'chan','fasf','fads','2024-10-22 16:42:06',NULL);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-08 20:19:34
+-- Dump completed on 2024-10-23 19:21:34

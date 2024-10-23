@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.36, for macos14 (arm64)
+-- MySQL dump 10.13  Distrib 8.0.40, for macos14 (arm64)
 --
 -- Host: 127.0.0.1    Database: logindb
 -- ------------------------------------------------------
@@ -37,7 +37,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('chan','찬휘','4321','2024-10-02 00:00:00'),('june','김준영','1234','2024-10-02 00:00:00'),('root','사용자계정','1111','2024-10-01 16:30:47'),('suck','석진','1111','2024-10-02 00:00:00');
+INSERT INTO `users` VALUES ('chan','찬휘','4321','2024-10-02 00:00:00'),('june','김준영','1234','2024-10-02 00:00:00'),('root','사용자계정','1111','2024-10-01 16:30:47'),('suck','석진','1111','2024-10-02 00:00:00'),('ㅇ','ㅇ','d','2024-10-17 14:17:40');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-08 20:19:34
+-- Dump completed on 2024-10-23 19:21:34

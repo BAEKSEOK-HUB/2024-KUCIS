@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.36, for macos14 (arm64)
+-- MySQL dump 10.13  Distrib 8.0.40, for macos14 (arm64)
 --
 -- Host: 127.0.0.1    Database: logindb
 -- ------------------------------------------------------
@@ -30,8 +30,9 @@ CREATE TABLE `message` (
   `sender` varchar(45) NOT NULL DEFAULT '1',
   `reciper` varchar(45) NOT NULL DEFAULT '1',
   `content` varchar(45) NOT NULL DEFAULT '1',
+  `report` blob,
   PRIMARY KEY (`messageid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +41,7 @@ CREATE TABLE `message` (
 
 LOCK TABLES `message` WRITE;
 /*!40000 ALTER TABLE `message` DISABLE KEYS */;
-INSERT INTO `message` VALUES (1,1,1,'2024-10-02 00:00:00','chan','1','hi'),(2,1,1,'2024-10-02 00:01:00','june','1','hiii'),(3,2,1,'2024-10-07 20:48:16','june','chan','상대방_아이디'),(4,1,1,'2024-10-08 17:03:06','june','chan','안녕');
+INSERT INTO `message` VALUES (1,1,1,'2024-10-02 00:00:00','chan','1','hi',NULL),(2,1,1,'2024-10-02 00:01:00','june','1','hiii',NULL),(3,2,1,'2024-10-07 20:48:16','june','chan','상대방_아이디',NULL),(4,1,1,'2024-10-08 17:03:06','june','chan','안녕',NULL),(5,4,1,'2024-10-22 16:41:01','chan','','첫 번째 메시지',NULL),(6,5,1,'2024-10-22 16:42:33','june','','안녕',NULL);
 /*!40000 ALTER TABLE `message` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-08 20:19:34
+-- Dump completed on 2024-10-23 19:21:34

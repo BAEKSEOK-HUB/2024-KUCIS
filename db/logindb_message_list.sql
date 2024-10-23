@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.36, for macos14 (arm64)
+-- MySQL dump 10.13  Distrib 8.0.40, for macos14 (arm64)
 --
 -- Host: 127.0.0.1    Database: logindb
 -- ------------------------------------------------------
@@ -29,7 +29,7 @@ CREATE TABLE `message_list` (
   `reciper` varchar(45) NOT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`roomid`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `message_list` (
 
 LOCK TABLES `message_list` WRITE;
 /*!40000 ALTER TABLE `message_list` DISABLE KEYS */;
-INSERT INTO `message_list` VALUES (1,'1','june','chan','2024-10-02 00:00:00'),(2,'1','chan','june','2024-10-02 00:00:00'),(3,'2','suck','chan','2024-10-02 00:00:00');
+INSERT INTO `message_list` VALUES (1,'1','june','chan','2024-10-02 00:00:00'),(2,'1','chan','june','2024-10-02 00:00:00'),(3,'2','suck','chan','2024-10-02 00:00:00'),(4,'3','chan','','2024-10-22 16:40:59'),(5,'4','june','','2024-10-22 16:42:25');
 /*!40000 ALTER TABLE `message_list` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-08 20:19:34
+-- Dump completed on 2024-10-23 19:21:34
