@@ -43,7 +43,7 @@ class MessageStorage {
       reciper, 
       content, 
       send_time,
-      report
+      report -- 'message' 테이블에서 report 가져오기
     FROM 
       message 
     WHERE 
@@ -118,20 +118,25 @@ class MessageStorage {
       m.sender, 
       p.title AS message_title, 
       m.created_at, 
-      m.report
+      msg.report -- 'message' 테이블에서 report 가져오기
     FROM 
       message_list m
     JOIN 
       posts p 
     ON 
       m.postnum = p.postnum
+    JOIN 
+      message msg -- 'message' 테이블과 JOIN하여 report 값 가져오기
+    ON 
+      m.roomid = msg.roomid
     WHERE 
-      (m.sender = ? OR m.reciper = ?);
+      (m.sender = ? OR m.reciper = ?)
+    ORDER BY m.created_at DESC;
   `;
     try {
       const [messages] = await db.promise().query(query, [userid, userid]);
 
-      // report 값이 1인 경우 content를 "차단된 메시지입니다"로 변경
+      // report 값이 1인 경우 message_title을 "차단된 메시지입니다"로 변경
       const processedMessages = messages.map((message) => {
         if (message.report === 1) {
           message.message_title = "차단된 메시지입니다";
