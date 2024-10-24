@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.40, for macos14 (arm64)
+-- MySQL dump 10.13  Distrib 8.0.17, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: logindb
+-- Host: localhost    Database: logindb
 -- ------------------------------------------------------
--- Server version	9.0.1
+-- Server version	8.3.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -30,7 +30,7 @@ CREATE TABLE `posts` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `report` tinyint DEFAULT NULL,
   PRIMARY KEY (`postnum`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,'june','첫글','11111','2024-10-02 00:00:00',NULL);
+INSERT INTO `posts` VALUES (1,'june','첫글','11111','2024-10-02 00:00:00',NULL),(6,'chan','시발','시밠발','2024-10-24 20:11:54',1);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-23 19:41:57
+-- Dump completed on 2024-10-24 20:24:38

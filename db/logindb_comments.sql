@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.40, for macos14 (arm64)
+-- MySQL dump 10.13  Distrib 8.0.17, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: logindb
+-- Host: localhost    Database: logindb
 -- ------------------------------------------------------
--- Server version	9.0.1
+-- Server version	8.3.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -34,8 +34,9 @@ CREATE TABLE `comments` (
   `step` varchar(45) NOT NULL,
   `board_id` varchar(45) NOT NULL,
   `member_id` varchar(45) NOT NULL,
+  `report` tinyint DEFAULT NULL,
   PRIMARY KEY (`commentsID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +45,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (1,0,'sds',NULL,'2024-10-17 13:27:00','0','1','2024-10-17 13:27:00','0','1','june'),(2,0,'dsda',NULL,'2024-10-17 13:27:03','1','1','2024-10-17 13:27:03','0','1','june'),(3,0,'ㄴ2ㄷㄴ3',NULL,'2024-10-17 13:38:57','0','2','2024-10-17 13:38:57','0','2','june'),(4,0,'ㅇㄷ3ㅇㄷ3ㅇ',NULL,'2024-10-17 13:38:59','3','2','2024-10-17 13:38:59','0','2','june'),(5,0,'ㅇ3ㅇ3ㅇㄷ',NULL,'2024-10-17 13:39:02','0','2','2024-10-17 13:39:02','0','2','june'),(6,0,'fdfdf',NULL,'2024-10-23 19:23:20','0','5','2024-10-23 19:23:20','0','5','june'),(7,0,'fdffd',NULL,'2024-10-23 19:23:22','0','5','2024-10-23 19:23:22','0','5','june');
+INSERT INTO `comments` VALUES (1,0,'sds',NULL,'2024-10-17 13:27:00','0','1','2024-10-17 13:27:00','0','1','june',1),(2,0,'dsda',NULL,'2024-10-17 13:27:03','1','1','2024-10-17 13:27:03','0','1','june',1),(3,0,'ㄴ2ㄷㄴ3',NULL,'2024-10-17 13:38:57','0','2','2024-10-17 13:38:57','0','2','june',NULL),(4,0,'ㅇㄷ3ㅇㄷ3ㅇ',NULL,'2024-10-17 13:38:59','3','2','2024-10-17 13:38:59','0','2','june',NULL),(5,0,'ㅇ3ㅇ3ㅇㄷ',NULL,'2024-10-17 13:39:02','0','2','2024-10-17 13:39:02','0','2','june',NULL),(6,0,'fdfdf',NULL,'2024-10-23 19:23:20','0','5','2024-10-23 19:23:20','0','5','june',NULL),(7,0,'fdffd',NULL,'2024-10-23 19:23:22','0','5','2024-10-23 19:23:22','0','5','june',NULL),(8,0,'씨발',NULL,'2024-10-24 20:13:11','1','1','2024-10-24 20:13:11','0','1','chan',1);
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-23 19:41:57
+-- Dump completed on 2024-10-24 20:24:38
