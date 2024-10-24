@@ -32,10 +32,18 @@ class CommentStorage {
             `;
             db.query(query, [board_id], (err, results) => {
                 if (err) reject(`${err}`);
-                resolve(results);
+                // report가 1인 댓글 처리
+            const processedComments = results.map((comment) => {
+                if (comment.report === 1) {
+                    comment.comment = "차단된 댓글입니다";
+                }
+                return comment;
             });
+
+            resolve(processedComments);
         });
-    }    
+    });
+}    
 
     static getCommentById(commentsID) {
         return new Promise((resolve, reject) => {
