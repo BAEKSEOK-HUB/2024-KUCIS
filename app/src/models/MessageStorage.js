@@ -18,6 +18,28 @@ class MessageStorage {
     });
   }
 
+  static getProfaneMessageCount() {
+    return new Promise((resolve, reject) => {
+        const query = "SELECT COUNT(*) AS count FROM message WHERE report = 1";
+        db.query(query, (err, result) => {
+            if (err) reject(err);
+            resolve(result[0].count);
+        });
+    });
+}
+
+static async getProfaneMessages() {
+  return new Promise((resolve, reject) => {
+      const query = "SELECT content FROM message WHERE report = 1";
+      db.query(query, (err, results) => {
+          if (err) reject(err);
+          resolve(results);
+      });
+  });
+}
+
+
+
   static async getMessagesByPostnum(postnum) {
     return new Promise((resolve, reject) => {
       const query = `

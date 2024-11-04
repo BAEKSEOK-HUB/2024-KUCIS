@@ -23,6 +23,17 @@ class CommentStorage {
         });
     }
 
+    static getProfaneCommentCount() {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT COUNT(*) AS count FROM comments WHERE report = 1";
+            db.query(query, (err, result) => {
+                if (err) reject(err);
+                resolve(result[0].count);
+            });
+        });
+    }
+    
+
     static getCommentsByPostId(board_id) {
         return new Promise((resolve, reject) => {
             const query = `

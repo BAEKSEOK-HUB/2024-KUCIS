@@ -23,6 +23,27 @@ class PostStorage {
         });
     }
 
+    static getProfanePostCount() {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT COUNT(*) AS count FROM posts WHERE report = 1";
+            db.query(query, (err, result) => {
+                if (err) reject(err);
+                resolve(result[0].count);
+            });
+        });
+    }
+    
+    static async getProfanePosts() {
+        return new Promise((resolve, reject) => {
+            const query = "SELECT title, content FROM posts WHERE report = 1";
+            db.query(query, (err, results) => {
+                if (err) reject(err);
+                resolve(results);
+            });
+        });
+    }
+    
+
     // 특정 ID의 게시글을 가져오는 메소드
     static async getPostById(id) {
         return new Promise((resolve, reject) => {

@@ -11,17 +11,45 @@ const MessageExtractor = require("../../models/extractMessages"); // MessageExtr
 const CommentStorage = require("../../models/CommentStorage"); // 댓글 작성 기능
 
 const output = {
-  home: (req, res) => {
-    res.render("home/index");
+  home: async (req, res) => {
+    try {
+        const profanePostCount = await PostStorage.getProfanePostCount();
+        const profaneCommentCount = await CommentStorage.getProfaneCommentCount();
+        const profaneMessageCount = await MessageStorage.getProfaneMessageCount();
+
+        res.render("home/index", {
+            profanePostCount,
+            profaneCommentCount,
+            profaneMessageCount
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("서버 오류 발생");
+    }
   },
+
 
   board: (req, res) => {
     res.render("home/board");
   },
 
-  login: (req, res) => {
-    res.render("home/login");
+  login: async (req, res) => {
+    try {
+        const profanePostCount = await PostStorage.getProfanePostCount();
+        const profaneCommentCount = await CommentStorage.getProfaneCommentCount();
+        const profaneMessageCount = await MessageStorage.getProfaneMessageCount();
+
+        res.render("home/login", {
+            profanePostCount,
+            profaneCommentCount,
+            profaneMessageCount
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("서버 오류 발생");
+    }
   },
+
 
   register: (req, res) => {
     res.render("home/register");
