@@ -32,7 +32,22 @@ class CommentStorage {
             });
         });
     }
-    
+
+    // CommentStorage.js
+    static getProfaneComments() {
+        return new Promise((resolve, reject) => {
+            const query = `
+            SELECT comments.comment, comments.commentsID AS commentId, comments.member_id AS author
+            FROM comments
+            WHERE comments.report = 1`;
+            db.query(query, (err, results) => {
+                if (err) reject(`${err}`);
+                resolve(results);
+            });
+        });
+    }
+
+
 
     static getCommentsByPostId(board_id) {
         return new Promise((resolve, reject) => {

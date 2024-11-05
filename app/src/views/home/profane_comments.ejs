@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>비속어가 포함된 댓글 목록</title>
+  <link rel="stylesheet" href="/css/home/main.css" />
+</head>
+<body>
+  <div class="content">
+    <h2 class="page-title">비속어가 포함된 댓글 목록</h2>
+    <ul class="profane-item-list">
+      <% profaneComments.forEach(comment => { %>
+        <li class="profane-item">
+          <strong>내용:</strong> <span class="item-content"><%= comment.comment %></span><br>
+          <strong>작성자 ID:</strong> <span class="item-content"><%= comment.author %></span>
+        </li>
+      <% }); %>
+    </ul>
+  </div>
+</body>
+</html>

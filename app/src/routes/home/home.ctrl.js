@@ -13,18 +13,56 @@ const CommentStorage = require("../../models/CommentStorage"); // 댓글 작성 
 const output = {
   home: async (req, res) => {
     try {
-        const profanePostCount = await PostStorage.getProfanePostCount();
-        const profaneCommentCount = await CommentStorage.getProfaneCommentCount();
-        const profaneMessageCount = await MessageStorage.getProfaneMessageCount();
+      // 비속어가 포함된 게시글, 댓글, 메시지의 수를 가져옴
+      const profanePostCount = await PostStorage.getProfanePostCount();
+      const profaneCommentCount = await CommentStorage.getProfaneCommentCount();
+      const profaneMessageCount = await MessageStorage.getProfaneMessageCount();
 
-        res.render("home/index", {
-            profanePostCount,
-            profaneCommentCount,
-            profaneMessageCount
-        });
+      // 비속어가 포함된 게시글과 메시지의 목록을 가져옴
+      const profanePosts = await PostStorage.getProfanePosts(); // 비속어 게시글 리스트
+      const profaneMessages = await MessageStorage.getProfaneMessages(); // 비속어 메시지 리스트
+      const profaneComments = await CommentStorage.getProfaneComments();
+
+      res.render("home/index", {
+        profanePostCount,
+        profaneCommentCount,
+        profaneMessageCount,
+        profanePosts,
+        profaneMessages,
+        profaneComments
+      });
     } catch (err) {
-        console.error(err);
-        res.status(500).send("서버 오류 발생");
+      console.error(err);
+      res.status(500).send("서버 오류 발생");
+    }
+  },
+  profanePosts: async (req, res) => {
+    try {
+      const profanePosts = await PostStorage.getProfanePosts();
+      res.render("home/profane_posts", { profanePosts });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("서버 오류 발생");
+    }
+  },
+
+  profaneComments: async (req, res) => {
+    try {
+      const profaneComments = await CommentStorage.getProfaneComments();
+      res.render("home/profane_comments", { profaneComments });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("서버 오류 발생");
+    }
+  },
+
+  profaneMessages: async (req, res) => {
+    try {
+      const profaneMessages = await MessageStorage.getProfaneMessages();
+      res.render("home/profane_messages", { profaneMessages });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("서버 오류 발생");
     }
   },
 
@@ -39,10 +77,17 @@ const output = {
         const profaneCommentCount = await CommentStorage.getProfaneCommentCount();
         const profaneMessageCount = await MessageStorage.getProfaneMessageCount();
 
+        const profanePosts = await PostStorage.getProfanePosts(); // 비속어 게시글 리스트
+        const profaneMessages = await MessageStorage.getProfaneMessages();
+        const profaneComments = await CommentStorage.getProfaneComments();
+
         res.render("home/login", {
             profanePostCount,
             profaneCommentCount,
-            profaneMessageCount
+            profaneMessageCount,
+            profanePosts,
+            profaneMessages,
+            profaneComments
         });
     } catch (err) {
         console.error(err);

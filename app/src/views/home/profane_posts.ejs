@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>비속어가 포함된 게시글 목록</title>
+  <link rel="stylesheet" href="/css/home/main.css" />
+</head>
+<body>
+  <div class="content">
+    <h2 class="page-title">비속어가 포함된 게시글 목록</h2>
+    <ul class="profane-item-list">
+      <% profanePosts.forEach(post => { %>
+        <li class="profane-item">
+          <strong>제목:</strong> <span class="item-content"><%= post.title %></span><br>
+          <strong>내용:</strong> <span class="item-content"><%= post.content %></span><br>
+          <strong>작성자 ID:</strong> <span class="item-content"><%= post.author %></span>
+        </li>
+      <% }); %>
+    </ul>
+  </div>
+</body>
+</html>

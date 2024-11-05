@@ -95,19 +95,64 @@ nav ul li a {
     margin-bottom: 10px;
 }
 
-.profane-list {
+.page-title {
+    color: #ffcc00;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.profane-list,
+.profane-item-list {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
-.profane-list li {
-    font-size: 16px;
+.profane-table {
+    display: table;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.profane-row {
+    display: table-row;
+    background-color: #555;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.profane-cell {
+    display: table-cell;
+    padding: 10px;
+    vertical-align: top;
     color: #ddd;
-    margin: 8px 0;
 }
 
-.profane-list li strong {
+.profane-cell strong {
     color: #ffcc00;
+    display: inline-block;
+    width: 80px; /* 레이블 너비를 일정하게 설정하여 정렬을 깔끔하게 */
+}
+
+.profane-item {
+    background-color: #555;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px;
+    color: #f0f0f0;
+}
+
+.profane-item strong {
+    color: #ffcc00;
+}
+
+.item-content {
+    color: #f0f0f0;
 }
 
 #community-rules {

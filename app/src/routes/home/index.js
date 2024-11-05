@@ -13,6 +13,9 @@ router.get("/community", ctrl.output.community);
 router.get("/message", ctrl.output.message);
 router.get("/message_chat", ctrl.output.messageChat);
 router.post("/message/chat/send", ctrl.process.sendMessage);
+router.get("/profane_posts", ctrl.output.profanePosts);
+router.get("/profane_comments", ctrl.output.profaneComments);
+router.get("/profane_messages", ctrl.output.profaneMessages);
 
 // 게시글 상세보기 처리 추가
 router.get("/post/:id", ctrl.postDetail);  // 여기에 GET 요청 라우트 추가

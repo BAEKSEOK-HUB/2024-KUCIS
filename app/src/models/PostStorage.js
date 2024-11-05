@@ -32,8 +32,20 @@ class PostStorage {
             });
         });
     }
-    
-    
+
+    static getProfanePosts() {
+        return new Promise((resolve, reject) => {
+            const query = `
+            SELECT posts.title, posts.content, posts.id AS author
+            FROM posts
+            WHERE posts.report = 1`;
+            db.query(query, (err, results) => {
+                if (err) reject(`${err}`);
+                resolve(results);
+            });
+        });
+    }
+
 
     // 특정 ID의 게시글을 가져오는 메소드
     static async getPostById(id) {

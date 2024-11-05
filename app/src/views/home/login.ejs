@@ -27,17 +27,27 @@
       </div>
     </div>
 
-    <!-- 노란색 구분선 추가 -->
+    <!-- 노란색 구분선 -->
     <div class="yellow-divider"></div>
 
     <div class="content">
-      <div class="profane-counts">
-        <h2 class="profane-title">비속어 탐지 현황</h2>
-        <ul class="profane-list">
-          <li>비속어가 포함된 게시물 수: <strong><%= profanePostCount %></strong></li>
-          <li>비속어가 포함된 댓글 수: <strong><%= profaneCommentCount %></strong></li>
-          <li>비속어가 포함된 메시지 수: <strong><%= profaneMessageCount %></strong></li>
-        </ul>
+
+      <!-- 비속어가 포함된 게시글 및 메시지 목록 표시 -->
+      <div class="profane-lists">
+        <div class="profane-counts">
+          <h2 class="profane-title">비속어 탐지 현황</h2>
+          <ul class="profane-list">
+            <li>비속어가 포함된 게시물 수: <strong><%= profanePostCount %></strong>
+              <a href="/profane_posts">게시글 목록 보기</a>
+            </li>
+            <li>비속어가 포함된 댓글 수: <strong><%= profaneCommentCount %></strong>
+              <a href="/profane_comments">댓글 목록 보기</a>
+            </li>
+            <li>비속어가 포함된 메시지 수: <strong><%= profaneMessageCount %></strong>
+              <a href="/profane_messages">메시지 목록 보기</a>
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div id="community-rules">
