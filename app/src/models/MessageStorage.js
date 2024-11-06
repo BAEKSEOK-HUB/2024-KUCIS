@@ -171,6 +171,29 @@ static getProfaneMessages() {
       throw err;
     }
   }
+  
+  static async checkMessageListExists(postnum, sender, reciper) {
+    const query = `
+      SELECT * FROM message_list 
+      WHERE postnum = ? AND sender = ? AND reciper = ?
+    `;
+    const [rows] = await db.promise().query(query, [postnum, sender, reciper]);
+    return rows.length > 0; // 존재하면 true 반환
+  }
+
+  // 쪽지 리스트를 생성할 때 중복 체크 포함
+  static async saveMessageList({ postnum, sender, reciper }) {
+    const exists = await this.checkMessageListExists(postnum, sender, reciper);
+    if (exists) {
+      return { success: false, message: "이미 존재하는 쪽지 리스트입니다." };
+    }
+    const query = `
+      INSERT INTO message_list (postnum, sender, reciper, created_at)
+      VALUES (?, ?, ?, NOW())
+    `;
+    const [result] = await db.promise().query(query, [postnum, sender, reciper]);
+    return { success: true };
+  }
 }
 
 module.exports = MessageStorage;

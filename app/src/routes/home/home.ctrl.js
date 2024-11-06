@@ -122,6 +122,16 @@ const output = {
       });
       console.log("Message save result:", saveResult);
 
+      const saveResults = await MessageStorage.saveMessageList({
+        postnum,
+        sender,
+        reciper,
+      });
+
+      if (!saveResults.success && saveResults.message === "이미 존재하는 쪽지 리스트입니다.") {
+        console.log("쪽지 리스트가 이미 존재하여 생성되지 않았습니다.");
+      }
+
       // 해당 게시물의 쪽지 목록을 DB에서 가져옴
       const messages = await MessageStorage.getMessagesByPostnum(postnum);
 
