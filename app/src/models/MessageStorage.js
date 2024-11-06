@@ -111,24 +111,23 @@ static getProfaneMessages() {
   }
 
   // 메시지를 DB에 저장하는 메서드
-  static async createMessage(roomid, postnum, sender, content) {
+  static async createMessage(roomid, postnum, sender, content, report) {
     try {
-      // 현재 roomid를 사용해 reciper 찾기
-      const reciper = await this.getReciperByRoomId(roomid, sender);
+        const reciper = await this.getReciperByRoomId(roomid, sender);
 
-      const query = `
-        INSERT INTO message (roomid, postnum, send_time, sender, reciper, content)
-        VALUES (?, ?, NOW(), ?, ?, ?)
-      `;
-      const [result] = await db
-        .promise()
-        .query(query, [roomid, postnum, sender, reciper, content]); // 필요한 값 전달
-      return result; // 생성된 메시지의 결과 반환
+        const query = `
+            INSERT INTO message (roomid, postnum, send_time, sender, reciper, content, report)
+            VALUES (?, ?, NOW(), ?, ?, ?, ?)
+        `;
+        const [result] = await db
+            .promise()
+            .query(query, [roomid, postnum, sender, reciper, content, report]);
+        return result; // 생성된 메시지의 결과 반환
     } catch (err) {
-      console.error("메시지 생성 오류:", err);
-      throw err;
+        console.error("메시지 생성 오류:", err);
+        throw err;
     }
-  }
+}
 
   // 사용자의 쪽지 목록을 가져오는 메서드
   static async getMessagesForUser(userid) {

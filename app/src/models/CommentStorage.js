@@ -4,8 +4,9 @@ class CommentStorage {
     static saveComment(comments) {
         return new Promise((resolve, reject) => {
             const query = `
-                INSERT INTO comments (comment, board_id, member_id, modify_regdate, date, answernum, parentnum, ref, step)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                INSERT INTO comments (comment, board_id, member_id, modify_regdate, date, answernum, parentnum, ref, step, report)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `;
             db.query(query, [
                 comments.comment,
                 comments.board_id,
@@ -16,6 +17,7 @@ class CommentStorage {
                 comments.parentnum,
                 comments.ref,
                 comments.step,
+                comments.report
             ], (err, result) => {
                 if (err) reject(`${err}`);
                 resolve({ success: true });
