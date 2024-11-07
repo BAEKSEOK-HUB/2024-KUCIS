@@ -37,15 +37,10 @@
         <div class="profane-counts">
           <h2 class="profane-title">비속어 탐지 현황</h2>
           <ul class="profane-list">
-            <li>비속어가 포함된 게시물 수: <strong><%= profanePostCount %></strong>
-              <a href="/profane_posts">게시글 목록 보기</a>
-            </li>
-            <li>비속어가 포함된 댓글 수: <strong><%= profaneCommentCount %></strong>
-              <a href="/profane_comments">댓글 목록 보기</a>
-            </li>
-            <li>비속어가 포함된 메시지 수: <strong><%= profaneMessageCount %></strong>
-              <a href="/profane_messages">메시지 목록 보기</a>
-            </li>
+            <li>비속어가 포함된 게시물 수: <strong><%= profanePostCount %></strong> <a href="/profane_posts" class="profane-link">게시글 목록 보기</a></li>
+            <li>비속어가 포함된 댓글 수: <strong><%= profaneCommentCount %></strong> <a href="/profane_comments" class="profane-link">댓글 목록 보기</a></li>
+            <li>비속어가 포함된 메시지 수: <strong><%= profaneMessageCount %></strong> <a href="/profane_messages" class="profane-link">메시지 목록 보기</a></li>
+
           </ul>
         </div>
       </div>
