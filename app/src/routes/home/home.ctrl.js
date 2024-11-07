@@ -103,7 +103,7 @@ const output = {
     res.render("home/register");
   },
 
-  messageList: async (req, res) => {
+  message: async (req, res) => {
     // 함수 이름을 messageList로 변경
     try {
       const { postnum, reciper, sender } = req.query;
@@ -271,15 +271,21 @@ const process = {
         const { title, content } = req.body;
         const id = req.cookies.userid;
 
-        // 비속어 탐지 API 호출
-        const prediction = await detectAbusiveLanguage(content);
-        console.log("Prediction result:", prediction); // 예측 결과 로그 추가
+        // 제목과 내용 모두에 대해 비속어 탐지 API 호출
+        const titlePrediction = await detectAbusiveLanguage(title);
+        const contentPrediction = await detectAbusiveLanguage(content);
 
-        // `result` 값을 확인하여 report 값을 설정합니다.
-        const report = (prediction && prediction.prediction.result === "욕설입니다") ? 1 : 0;
+        console.log("Title Prediction result:", titlePrediction);
+        console.log("Content Prediction result:", contentPrediction);
+
+        // 제목 또는 내용 중 하나라도 비속어가 포함된 경우 report를 1로 설정
+        const report = (
+            (titlePrediction && titlePrediction.prediction.result.includes("욕설입니다")) ||
+            (contentPrediction && contentPrediction.prediction.result.includes("욕설입니다"))
+        ) ? 1 : 0;
 
         const post = { title, content, id, report };
-        console.log("Report Value (expected 1 if abusive):", report); // report 값 확인 로그
+        console.log("Report Value (expected 1 if abusive):", report);
 
         await PostStorage.savePost(post);
         res.json({ success: true });
