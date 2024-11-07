@@ -9,19 +9,95 @@ const fs = require("fs");
 const { createObjectCsvWriter } = require("csv-writer");
 const MessageExtractor = require("../../models/extractMessages"); // MessageExtractor를 불러옵니다.
 const CommentStorage = require("../../models/CommentStorage"); // 댓글 작성 기능
+const axios = require("axios");
+
+const apiUrl = "https://4cb5818c388d.ngrok.app/predict";
+
 
 const output = {
-  home: (req, res) => {
-    res.render("home/index");
+  home: async (req, res) => {
+      try {
+          const profanePostCount = await PostStorage.getProfanePostCount();
+          const profaneCommentCount = await CommentStorage.getProfaneCommentCount();
+          const profaneMessageCount = await MessageStorage.getProfaneMessageCount();
+
+          const profanePosts = await PostStorage.getProfanePosts();
+          const profaneMessages = await MessageStorage.getProfaneMessages();
+          const profaneComments = await CommentStorage.getProfaneComments();
+
+          res.render("home/index", {
+              profanePostCount,
+              profaneCommentCount,
+              profaneMessageCount,
+              profanePosts,
+              profaneMessages,
+              profaneComments,
+          });
+      } catch (err) {
+          console.error(err);
+          res.status(500).send("서버 오류 발생");
+      }
   },
+
+  profanePosts: async (req, res) => {
+    try {
+      const profanePosts = await PostStorage.getProfanePosts();
+      res.render("home/profane_posts", { profanePosts });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("서버 오류 발생");
+    }
+  },
+
+  profaneComments: async (req, res) => {
+    try {
+      const profaneComments = await CommentStorage.getProfaneComments();
+      res.render("home/profane_comments", { profaneComments });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("서버 오류 발생");
+    }
+  },
+
+  profaneMessages: async (req, res) => {
+    try {
+      const profaneMessages = await MessageStorage.getProfaneMessages();
+      res.render("home/profane_messages", { profaneMessages });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("서버 오류 발생");
+    }
+  },
+
 
   board: (req, res) => {
     res.render("home/board");
   },
 
-  login: (req, res) => {
-    res.render("home/login");
+  login: async (req, res) => {
+    try {
+        const profanePostCount = await PostStorage.getProfanePostCount();
+        const profaneCommentCount = await CommentStorage.getProfaneCommentCount();
+        const profaneMessageCount = await MessageStorage.getProfaneMessageCount();
+
+        const profanePosts = await PostStorage.getProfanePosts(); // 비속어 게시글 리스트
+        const profaneMessages = await MessageStorage.getProfaneMessages();
+        const profaneComments = await CommentStorage.getProfaneComments();
+
+        res.render("home/login", {
+            profanePostCount,
+            profaneCommentCount,
+            profaneMessageCount,
+            profanePosts,
+            profaneMessages,
+            profaneComments
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("서버 오류 발생");
+    }
   },
+
 
   register: (req, res) => {
     res.render("home/register");
@@ -48,6 +124,16 @@ const output = {
         reciper,
       });
       console.log("Message save result:", saveResult);
+
+      const saveResults = await MessageStorage.saveMessageList({
+        postnum,
+        sender,
+        reciper,
+      });
+
+      if (!saveResults.success && saveResults.message === "이미 존재하는 쪽지 리스트입니다.") {
+        console.log("쪽지 리스트가 이미 존재하여 생성되지 않았습니다.");
+      }
 
       // 해당 게시물의 쪽지 목록을 DB에서 가져옴
       const messages = await MessageStorage.getMessagesByPostnum(postnum);
@@ -182,17 +268,32 @@ const process = {
 
   writePost: async (req, res) => {
     try {
-      const { title, content } = req.body; // 클라이언트에서 전송된 게시글 제목과 내용
-      const id = req.cookies.userid;
-      const post = { title, content, id }; // 게시글 데이터 구성
+        const { title, content } = req.body;
+        const id = req.cookies.userid;
 
-      await PostStorage.savePost(post); // 게시글을 DB에 저장
-      res.json({ success: true }); // 게시글 작성 후 게시글 목록으로 리다이렉트
+        // 제목과 내용 모두에 대해 비속어 탐지 API 호출
+        const titlePrediction = await detectAbusiveLanguage(title);
+        const contentPrediction = await detectAbusiveLanguage(content);
+
+        console.log("Title Prediction result:", titlePrediction);
+        console.log("Content Prediction result:", contentPrediction);
+
+        // 제목 또는 내용 중 하나라도 비속어가 포함된 경우 report를 1로 설정
+        const report = (
+            (titlePrediction && titlePrediction.prediction.result.includes("욕설입니다")) ||
+            (contentPrediction && contentPrediction.prediction.result.includes("욕설입니다"))
+        ) ? 1 : 0;
+
+        const post = { title, content, id, report };
+        console.log("Report Value (expected 1 if abusive):", report);
+
+        await PostStorage.savePost(post);
+        res.json({ success: true });
     } catch (err) {
-      console.error("게시글 작성 오류:", err);
-      res.status(500).send("게시글 작성 실패"); // 오류 발생 시 에러 메시지 출력
+        console.error("게시글 작성 오류:", err);
+        res.status(500).send("게시글 작성 실패");
     }
-  },
+},
 
   deletePost: async (req, res) => {
     try {
@@ -208,29 +309,33 @@ const process = {
 
   sendMessage: async (req, res) => {
     const { roomid, content } = req.body;
-    const sender = req.cookies.userid; // 로그인한 사용자 ID 가져오기
+    const sender = req.cookies.userid;
 
-    // 필수 값 체크
     if (!content || !roomid || !sender) {
-      return res.status(400).send("메시지 내용 또는 방 ID가 누락되었습니다.");
+        return res.status(400).send("메시지 내용 또는 방 ID가 누락되었습니다.");
     }
 
     try {
-      const postnum = 1; // 현재 포스트 번호를 실제로 설정해야 합니다.
+        const postnum = 1;
 
-      // reciper를 message_list에서 찾기
-      const reciper = await MessageStorage.getReciperByRoomId(roomid, sender);
+        // 비속어 탐지 API 호출
+        const prediction = await detectAbusiveLanguage(content);
+        console.log("Prediction result:", prediction); // 예측 결과 로그 추가
 
-      // DB에 메시지 저장
-      await MessageStorage.createMessage(roomid, postnum, sender, content);
+        const report = (prediction && prediction.prediction.result.includes("욕설입니다")) ? 1 : 0;
+        console.log("Report Value (expected 1 if abusive):", report); // report 값 확인 로그
 
-      // 저장 후 해당 채팅방으로 리다이렉트
-      res.redirect(`/message_chat?roomid=${roomid}`); // URL 수정: /message_chat -> /message/chat
+        const reciper = await MessageStorage.getReciperByRoomId(roomid, sender);
+        await MessageStorage.createMessage(roomid, postnum, sender, content, report);
+
+        res.redirect(`/message_chat?roomid=${roomid}`);
     } catch (err) {
-      console.error("메시지 저장 오류:", err);
-      res.status(500).send("서버 오류 발생");
+        console.error("메시지 저장 오류:", err);
+        res.status(500).send("서버 오류 발생");
     }
-  },
+},
+
+
 
   extractMessages: async (req, res) => {
     const messageExtractor = new MessageExtractor(req.body); // POST 요청으로 들어온 데이터 처리
@@ -244,44 +349,45 @@ const process = {
 
   writeComment: async (req, res) => {
     try {
-      const { comment, parentnum } = req.body; // 클라이언트에서 전송된 댓글 내용과 부모 댓글 번호
-      const postnum = req.params.id; // URL에서 게시글 번호를 가져옴
-      const member_id = req.cookies.userid; // 현재 로그인한 사용자 ID를 쿠키에서 가져옴
+        const { comment, parentnum } = req.body;
+        const postnum = req.params.id;
+        const member_id = req.cookies.userid;
 
-      let ref;
+        // 비속어 탐지 API 호출
+        const prediction = await detectAbusiveLanguage(comment);
+        console.log("Prediction result:", prediction); // 예측 결과 로그 추가
 
-      // 대댓글인 경우 상위 댓글의 ref 값을 상속받음
-      if (parentnum && parentnum !== "0") {
-        const parentComment = await CommentStorage.getCommentById(parentnum);
-        ref = parentComment ? parentComment.ref : postnum; // 상위 댓글의 ref 값 사용
-      } else {
-        // 일반 댓글인 경우 게시글 번호를 ref로 설정
-        ref = postnum;
-      }
+        const report = (prediction && prediction.prediction.result.includes("욕설입니다")) ? 1 : 0;
+        console.log("Report Value (expected 1 if abusive):", report); // report 값 확인 로그
 
-      // 댓글 데이터 구성
-      const commentData = {
-        comment: comment,
-        board_id: postnum, // 게시글 ID
-        member_id: member_id, // 댓글 작성자 ID
-        modify_regdate: new Date(), // 수정 날짜
-        date: new Date(), // 작성 날짜
-        answernum: 0, // 기본값으로 설정 (답글 구조일 경우 변경)
-        parentnum: parentnum || 0, // 부모 댓글 번호가 없으면 0
-        ref: ref, // ref 값 설정 (상위 댓글이 있으면 상위 댓글의 ref, 없으면 게시글 번호)
-        step: 0, // 기본값으로 설정
-      };
+        let ref;
+        if (parentnum && parentnum !== "0") {
+            const parentComment = await CommentStorage.getCommentById(parentnum);
+            ref = parentComment ? parentComment.ref : postnum;
+        } else {
+            ref = postnum;
+        }
 
-      // 댓글 저장 로직 (CommentStorage의 saveComment 함수 사용)
-      await CommentStorage.saveComment(commentData);
+        const commentData = {
+            comment,
+            board_id: postnum,
+            member_id,
+            modify_regdate: new Date(),
+            date: new Date(),
+            answernum: 0,
+            parentnum: parentnum || 0,
+            ref,
+            step: 0,
+            report
+        };
 
-      // 댓글 작성 후 해당 게시글로 리다이렉트
-      res.redirect(`/post/${postnum}`);
+        await CommentStorage.saveComment(commentData);
+        res.redirect(`/post/${postnum}`);
     } catch (err) {
-      console.error("댓글 작성 오류:", err);
-      res.status(500).send("댓글 작성 실패");
+        console.error("댓글 작성 오류:", err);
+        res.status(500).send("댓글 작성 실패");
     }
-  },
+},
 };
 
 const postDetail = async (req, res) => {
@@ -310,8 +416,21 @@ const postDetail = async (req, res) => {
   }
 };
 
+// 비속어 탐지 API 호출 함수
+const detectAbusiveLanguage = async (text) => {
+  try {
+    const response = await axios.post(apiUrl, { text });
+    return response.data;
+  } catch (error) {
+    console.error("Error calling API:", error);
+    throw error;
+  }
+};
+
+
 module.exports = {
   output,
   process,
   postDetail, // 게시글 조회 함수
+  detectAbusiveLanguage,
 };
