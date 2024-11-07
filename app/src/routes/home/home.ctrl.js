@@ -11,7 +11,7 @@ const MessageExtractor = require("../../models/extractMessages"); // MessageExtr
 const CommentStorage = require("../../models/CommentStorage"); // 댓글 작성 기능
 const axios = require("axios");
 
-const apiUrl = "https://8190047498c0.ngrok.app/predict";
+const apiUrl = "https://4cb5818c388d.ngrok.app/predict";
 
 
 const output = {
@@ -320,7 +320,10 @@ const process = {
 
         // 비속어 탐지 API 호출
         const prediction = await detectAbusiveLanguage(content);
-        const report = (prediction && prediction.prediction.result === "욕설입니다") ? 1 : 0;
+        console.log("Prediction result:", prediction); // 예측 결과 로그 추가
+
+        const report = (prediction && prediction.prediction.result.includes("욕설입니다")) ? 1 : 0;
+        console.log("Report Value (expected 1 if abusive):", report); // report 값 확인 로그
 
         const reciper = await MessageStorage.getReciperByRoomId(roomid, sender);
         await MessageStorage.createMessage(roomid, postnum, sender, content, report);
@@ -331,6 +334,7 @@ const process = {
         res.status(500).send("서버 오류 발생");
     }
 },
+
 
 
   extractMessages: async (req, res) => {
@@ -351,7 +355,10 @@ const process = {
 
         // 비속어 탐지 API 호출
         const prediction = await detectAbusiveLanguage(comment);
-        const report = (prediction && prediction.prediction.result === "욕설입니다") ? 1 : 0;
+        console.log("Prediction result:", prediction); // 예측 결과 로그 추가
+
+        const report = (prediction && prediction.prediction.result.includes("욕설입니다")) ? 1 : 0;
+        console.log("Report Value (expected 1 if abusive):", report); // report 값 확인 로그
 
         let ref;
         if (parentnum && parentnum !== "0") {
