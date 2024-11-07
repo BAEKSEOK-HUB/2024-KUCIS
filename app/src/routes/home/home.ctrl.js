@@ -103,7 +103,7 @@ const output = {
     res.render("home/register");
   },
 
-  message: async (req, res) => {
+  messageList: async (req, res) => {
     // 함수 이름을 messageList로 변경
     try {
       const { postnum, reciper, sender } = req.query;

@@ -2,17 +2,6 @@ const db = require("../config/db");
 
 class MessageStorage {
   static async saveMessageList({ postnum, sender, reciper }) {
-    const exists = await this.checkMessageListExists(postnum, sender, reciper);
-    if (exists) {
-      return { success: false, message: "이미 존재하는 쪽지 리스트입니다." };
-    }
-    const query = `
-      INSERT INTO message_list (postnum, sender, reciper, created_at)
-      VALUES (?, ?, ?, NOW())
-    `;
-    const [result] = await db.promise().query(query, [postnum, sender, reciper]);
-    return { success: true };
-    
     return new Promise((resolve, reject) => {
       const query = `
             INSERT INTO message_list (postnum, sender, reciper, created_at)
@@ -28,19 +17,6 @@ class MessageStorage {
       });
     });
   }
-  //  // 쪽지 리스트를 생성할 때 중복 체크 포함
-  // static async saveMessageList({ postnum, sender, reciper }) {
-  //   const exists = await this.checkMessageListExists(postnum, sender, reciper);
-  //   if (exists) {
-  //     return { success: false, message: "이미 존재하는 쪽지 리스트입니다." };
-  //   }
-  //   const query = `
-  //     INSERT INTO message_list (postnum, sender, reciper, created_at)
-  //     VALUES (?, ?, ?, NOW())
-  //   `;
-  //   const [result] = await db.promise().query(query, [postnum, sender, reciper]);
-  //   return { success: true };
-  // }
 
   static getProfaneMessageCount() {
     return new Promise((resolve, reject) => {
@@ -204,6 +180,19 @@ static getProfaneMessages() {
     return rows.length > 0; // 존재하면 true 반환
   }
 
+  // 쪽지 리스트를 생성할 때 중복 체크 포함
+  static async saveMessageList({ postnum, sender, reciper }) {
+    const exists = await this.checkMessageListExists(postnum, sender, reciper);
+    if (exists) {
+      return { success: false, message: "이미 존재하는 쪽지 리스트입니다." };
+    }
+    const query = `
+      INSERT INTO message_list (postnum, sender, reciper, created_at)
+      VALUES (?, ?, ?, NOW())
+    `;
+    const [result] = await db.promise().query(query, [postnum, sender, reciper]);
+    return { success: true };
+  }
 }
 
 module.exports = MessageStorage;
