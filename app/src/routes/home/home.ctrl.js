@@ -11,7 +11,7 @@ const MessageExtractor = require("../../models/extractMessages"); // MessageExtr
 const CommentStorage = require("../../models/CommentStorage"); // 댓글 작성 기능
 const axios = require("axios");
 
-const apiUrl = "https://b7543a6f868e.ngrok.app/predict";
+const apiUrl = "https://8190047498c0.ngrok.app/predict";
 
 
 const output = {

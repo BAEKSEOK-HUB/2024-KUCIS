@@ -145,8 +145,8 @@ static getProfaneMessages() {
       posts p 
     ON 
       m.postnum = p.postnum
-    JOIN 
-      message msg -- 'message' 테이블과 JOIN하여 report 값 가져오기
+    LEFT JOIN 
+      message msg -- 'LEFT JOIN'으로 변경하여 message가 없어도 출력 가능하게 함
     ON 
       m.roomid = msg.roomid
     WHERE 
