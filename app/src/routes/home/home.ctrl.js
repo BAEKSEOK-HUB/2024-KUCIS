@@ -11,7 +11,7 @@ const MessageExtractor = require("../../models/extractMessages"); // MessageExtr
 const CommentStorage = require("../../models/CommentStorage"); // 댓글 작성 기능
 const axios = require("axios");
 
-const apiUrl = "https://4cb5818c388d.ngrok.app/predict";
+const apiUrl = "https://cfc7986c86fc.ngrok.app/predict";
 
 
 const output = {
@@ -103,64 +103,46 @@ const output = {
     res.render("home/register");
   },
 
-  messageList: async (req, res) => {
-    // 함수 이름을 messageList로 변경
+  message: async (req, res) => {
+    console.log("message 함수 진입"); // 함수 시작 지점 로그
     try {
       const { postnum, reciper, sender } = req.query;
+      const userid = req.cookies.userid; // 로그인된 사용자 ID 가져오기
+      console.log("로그인된 사용자 ID:", userid); // 로그인된 사용자 ID 로그
 
-      // 파라미터가 제대로 들어왔는지 로그로 확인
-      console.log("postnum:", postnum);
-      console.log("reciper:", reciper);
-      console.log("sender:", sender);
+      if (!userid) return res.status(401).send("로그인이 필요합니다.");
 
-      if (!sender) {
-        return res.status(401).send("로그인이 필요합니다."); // 로그인되지 않은 경우 처리
+      let messages;
+      if (postnum && reciper && sender) {
+        console.log("postnum:", postnum, "reciper:", reciper, "sender:", sender); // 쿼리 파라미터 로그
+
+        // 중복 확인
+        const exists = await MessageStorage.checkMessageListExists(postnum, sender, reciper);
+        console.log("쪽지 리스트 중복 여부:", exists); // 중복 여부 확인 로그
+
+        if (!exists) {
+          await MessageStorage.saveMessageList({ postnum, sender, reciper });
+          console.log("새로운 쪽지 리스트가 생성되었습니다."); // 새로운 쪽지 리스트 생성 로그
+        } else {
+          console.log("이미 존재하는 쪽지 리스트입니다."); // 이미 존재하는 쪽지 리스트 로그
+        }
+
+        // 특정 게시물 관련 쪽지 목록 조회
+        messages = await MessageStorage.getMessagesByPostnum(postnum);
+        console.log("특정 게시물 관련 쪽지 목록 조회 결과:", messages); // 쪽지 목록 조회 로그
+      } else {
+        // 일반 쪽지 목록 조회
+        messages = await MessageStorage.getMessagesForUser(userid);
+        console.log("일반 쪽지 목록 조회 결과:", messages); // 일반 쪽지 목록 조회 로그
       }
 
-      // message_list에 해당 정보 저장
-      const saveResult = await MessageStorage.saveMessageList({
-        postnum,
-        sender,
-        reciper,
-      });
-      console.log("Message save result:", saveResult);
-
-      const saveResults = await MessageStorage.saveMessageList({
-        postnum,
-        sender,
-        reciper,
-      });
-
-      if (!saveResults.success && saveResults.message === "이미 존재하는 쪽지 리스트입니다.") {
-        console.log("쪽지 리스트가 이미 존재하여 생성되지 않았습니다.");
-      }
-
-      // 해당 게시물의 쪽지 목록을 DB에서 가져옴
-      const messages = await MessageStorage.getMessagesByPostnum(postnum);
-
-      // 가져온 쪽지 데이터를 EJS에 전달하여 렌더링
       res.render("home/message", { messages, postnum, sender, reciper });
     } catch (err) {
-      console.error("쪽지 생성 오류:", err); // 구체적인 오류를 콘솔에 출력
+      console.error("쪽지 조회 오류:", err);
       res.status(500).send("서버 오류 발생");
     }
   },
 
-  message: async (req, res) => {
-    try {
-      const userid = req.cookies.userid; // 쿠키에서 userid 값을 가져옴
-      if (!userid) {
-        return res.status(401).send("로그인이 필요합니다."); // 로그인되지 않은 경우 처리
-      }
-
-      const messages = await MessageStorage.getMessagesForUser(userid); // 해당 사용자의 쪽지 가져오기
-
-      res.render("home/message", { messages }); // 가져온 쪽지 데이터를 EJS에 전달
-    } catch (err) {
-      console.error("쪽지 리스트 불러오기 오류:", err);
-      res.status(500).send("서버 오류 발생");
-    }
-  },
 
   postView: async (req, res) => {
     try {
@@ -334,8 +316,6 @@ const process = {
         res.status(500).send("서버 오류 발생");
     }
 },
-
-
 
   extractMessages: async (req, res) => {
     const messageExtractor = new MessageExtractor(req.body); // POST 요청으로 들어온 데이터 처리

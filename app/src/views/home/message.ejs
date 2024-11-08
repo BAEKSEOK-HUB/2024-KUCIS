@@ -16,32 +16,25 @@
 
     <div class="container">
       <div class="form-title">내 쪽지 리스트</div>
-
       <ul class="message-list">
-        <% if (messages.length > 0) { %> <% messages.forEach(function(message1) {
-        %>
-        <li class="message-item">
-          <p class="message-title"><%= message1.postnum %></p>
-          <p class="message-title">보낸 사람: <%= message1.sender %></p>
-          <p>받는 사람: <%= message1.reciper %></p>
-          <p  class="message-time">보낸 시간: <%= message1.created_at %></p>
-          <!-- 쪽지 제목 -->
-          <!-- 쪽지 시간 -->
-          <div class="message-actions">
-            <!-- roomid를 쿼리 파라미터로 전달하여 message_chat으로 이동 -->
-            <form method="get" action="/message_chat">
-              <input
-                type="hidden"
-                name="roomid"
-                value="<%= message1.roomid %>"
-              />
-              <button type="submit" class="button-view">보기</button>
-            </form>
-            <button class="button-delete">삭제</button>
-          </div>
-        </li>
-        <% }); %> <% } else { %>
-        <li class="message-item">받은 쪽지가 없습니다.</li>
+        <% if (messages.length > 0) { %>
+          <% messages.forEach(function(message) { %>
+            <li class="message-item">
+              <p class="message-title"><%= message.postnum %></p>
+              <p class="message-title">보낸 사람: <%= message.sender %></p>
+              <p>받는 사람: <%= message.reciper %></p>
+              <p class="message-time">보낸 시간: <%= message.created_at %></p>
+              <div class="message-actions">
+                <form method="get" action="/message_chat">
+                  <input type="hidden" name="roomid" value="<%= message.roomid %>" />
+                  <button type="submit" class="button-view">보기</button>
+                </form>
+                <button class="button-delete">삭제</button>
+              </div>
+            </li>
+          <% }); %>
+        <% } else { %>
+          <li class="message-item">받은 쪽지가 없습니다.</li>
         <% } %>
       </ul>
     </div>
