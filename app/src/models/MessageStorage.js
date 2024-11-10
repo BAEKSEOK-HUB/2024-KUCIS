@@ -3,18 +3,20 @@ const db = require("../config/db");
 class MessageStorage {
   // 중복 확인 메서드
   static async checkMessageListExists(postnum, sender, reciper) {
+    const [sortedSender, sortedReciper] = [sender, reciper].sort(); // 정렬하여 일관된 순서로 사용
     const query = `
       SELECT * FROM message_list 
       WHERE postnum = ? AND sender = ? AND reciper = ?
     `;
-    const [rows] = await db.promise().query(query, [postnum, sender, reciper]);
+    const [rows] = await db.promise().query(query, [postnum, sortedSender, sortedReciper]);
     console.log("중복 확인 결과:", rows.length > 0 ? "중복 존재" : "중복 없음"); // 중복 여부 로그
     return rows.length > 0; // 존재하면 true 반환
   }
 
   // 쪽지 리스트 저장 메서드
   static async saveMessageList({ postnum, sender, reciper }) {
-    const exists = await this.checkMessageListExists(postnum, sender, reciper);
+    const [sortedSender, sortedReciper] = [sender, reciper].sort(); // 정렬하여 일관된 순서로 사용
+    const exists = await this.checkMessageListExists(postnum, sortedSender, sortedReciper);
     if (exists) {
       return { success: false, message: "이미 존재하는 쪽지 리스트입니다." };
     }
@@ -22,10 +24,11 @@ class MessageStorage {
       INSERT INTO message_list (postnum, sender, reciper, created_at)
       VALUES (?, ?, ?, NOW())
     `;
-    const [result] = await db.promise().query(query, [postnum, sender, reciper]);
+    const [result] = await db.promise().query(query, [postnum, sortedSender, sortedReciper]);
     console.log("새로운 쪽지 리스트가 저장되었습니다."); // 쪽지 리스트 저장 로그
     return { success: true };
   }
+
 
   static getProfaneMessageCount() {
     return new Promise((resolve, reject) => {
