@@ -15,9 +15,9 @@ class UserStorage {
 
     static async save (userInfo) {
         return new Promise((resolve, reject) =>{
-        const query = "INSERT INTO users(id, psword, name) VALUES(?,?,?);"
+        const query = "INSERT INTO users(id, password, name) VALUES(?,?,?);"
             db.query(query, 
-                [userInfo.id, userInfo.psword, userInfo.name], 
+                [userInfo.id, userInfo.password, userInfo.name], 
                 (err) =>{
                 if (err) reject(err);
                 resolve({success: true});

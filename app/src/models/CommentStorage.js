@@ -4,18 +4,15 @@ class CommentStorage {
     static saveComment(comments) {
         return new Promise((resolve, reject) => {
             const query = `
-                INSERT INTO comments (comment, board_id, member_id, modify_regdate, date, answernum, parentnum, ref, step)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                INSERT INTO comments (comment, postnum, user_id, date, parent_id, ref)
+                VALUES (?, ?, ?, ?, ?, ?)`;
             db.query(query, [
                 comments.comment,
-                comments.board_id,
-                comments.member_id,
-                comments.modify_regdate,
+                comments.postnum,
+                comments.user_id,
                 comments.date,
-                comments.answernum,
-                comments.parentnum,
+                comments.parent_id,
                 comments.ref,
-                comments.step,
             ], (err, result) => {
                 if (err) reject(`${err}`);
                 resolve({ success: true });
@@ -23,14 +20,14 @@ class CommentStorage {
         });
     }
 
-    static getCommentsByPostId(board_id) {
+    static getCommentsByPostId(postnum) {
         return new Promise((resolve, reject) => {
             const query = `
                 SELECT * FROM comments 
-                WHERE board_id = ? 
-                ORDER BY IF(parentnum = 0, commentsID, parentnum), date ASC
+                WHERE postnum = ? 
+                ORDER BY IF(parent_id = 0, commentsID, parent_id), date ASC
             `;
-            db.query(query, [board_id], (err, results) => {
+            db.query(query, [postnum], (err, results) => {
                 if (err) reject(`${err}`);
                 // report가 1인 댓글 처리
             const processedComments = results.map((comment) => {

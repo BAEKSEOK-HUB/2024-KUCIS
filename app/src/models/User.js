@@ -12,7 +12,7 @@ class User {
     try {
       const user = await UserStorage.getUserInfo(client.id);
       if (user) {
-        if (user.id === client.id && user.psword === client.psword) {
+        if (user.id === client.id && user.password === client.password) {
           return { success: true };
         }
         return { success: false, msg: "비밀번호가 틀렸습니다." };

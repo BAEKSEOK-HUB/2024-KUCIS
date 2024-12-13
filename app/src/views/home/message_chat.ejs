@@ -29,7 +29,7 @@
         <% if (messages.length > 0) { %> <% messages.forEach(function(message) {
         %>
         <div
-          class="message-container <%= message.sender === sender ? 'message-sender' : 'message-recipient' %>"
+          class="message-container <%= message.sender_id === sender_id ? 'message-sender_id' : 'message-recipient' %>"
         >
           <div class="message">
             <span><%= message.content %></span>

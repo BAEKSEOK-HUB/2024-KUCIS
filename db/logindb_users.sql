@@ -25,8 +25,8 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` varchar(30) NOT NULL,
   `name` varchar(30) NOT NULL,
-  `psword` varchar(30) NOT NULL,
-  `in_data` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `password` varchar(30) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -37,7 +37,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('chan','찬휘','4321','2024-10-02 00:00:00'),('june','김준영','1234','2024-10-02 00:00:00'),('root','사용자계정','1111','2024-10-01 16:30:47'),('suck','석진','1111','2024-10-02 00:00:00'),('ㅇ','ㅇ','d','2024-10-17 14:17:40');
+INSERT INTO `users` VALUES ('chan','이찬휘','4321','2024-12-13 23:19:27'),('june','김준영','1111','2024-12-14 02:56:02');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-24 20:24:38
+-- Dump completed on 2024-12-14  3:18:36

@@ -85,7 +85,7 @@ h2 {
 }
 
 /* 내가 보낸 메시지 (오른쪽) */
-.message-sender {
+.message-sender_id {
   align-self: flex-end;
   background-color: #ffcc00;
   color: #333;
@@ -113,7 +113,7 @@ h2 {
 }
 
 /* 보낸 사람 이름 및 시간 스타일 */
-.message-sender-name {
+.message-sender_id-name {
   font-size: 12px;
   text-align: right;
   color: #ccc;

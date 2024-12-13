@@ -239,7 +239,7 @@
           <!-- 부모 댓글 -->
           <li class="comment">
             <div class="comment-meta">
-              <strong><%= comment.member_id %></strong>
+              <strong><%= comment.user_id %></strong>
               <span><%= new Date(comment.date).toLocaleString() %></span>
             </div>
             <div class="comment-content"><%= comment.comment %></div>
@@ -256,7 +256,7 @@
             >
               <input
                 type="hidden"
-                name="parentnum"
+                name="parent_id"
                 value="<%= comment.commentsID %>"
               />
               <textarea
@@ -269,12 +269,12 @@
 
             <!-- 해당 댓글의 대댓글 표시 -->
             <ul>
-              <% replies.forEach(function(reply) { %> <% if (reply.parentnum ==
+              <% replies.forEach(function(reply) { %> <% if (reply.parent_id ==
               comment.commentsID) { %>
               <!-- 부모 댓글과 연관된 대댓글만 표시 -->
               <li class="reply">
                 <div class="comment-meta">
-                  <strong><%= reply.member_id %></strong>
+                  <strong><%= reply.user_id %></strong>
                   <span><%= new Date(reply.date).toLocaleString() %></span>
                 </div>
                 <div class="comment-content"><%= reply.comment %></div>
@@ -289,8 +289,8 @@
 
         <!-- 일반 댓글 작성 폼 -->
         <form action="/post/<%= post.postnum %>/comment" method="post">
-          <input type="hidden" name="parentnum" value="0" />
-          <!-- 일반 댓글은 parentnum이 0 -->
+          <input type="hidden" name="parent_id" value="0" />
+          <!-- 일반 댓글은 parent_id이 0 -->
           <textarea
             name="comment"
             placeholder="댓글을 입력하세요..."
@@ -313,14 +313,14 @@
       </script>
 
       <script>
-        function sendMessage(postnum, reciper) {
-          const sender = getCookie("userid"); // 쿠키에서 로그인한 사용자 ID를 가져옴
-          if (!sender) {
+        function sendMessage(postnum, reciver_id) {
+          const sender_id = getCookie("userid"); // 쿠키에서 로그인한 사용자 ID를 가져옴
+          if (!sender_id) {
             alert("로그인이 필요합니다.");
             return;
           }
           // 새 경로로 이동하며, 필요한 정보를 쿼리 스트링으로 전달
-          location.href = `/message_list?postnum=${postnum}&reciper=${reciper}&sender=${sender}`;
+          location.href = `/message_list?postnum=${postnum}&reciver_id=${reciver_id}&sender_id=${sender_id}`;
         }
 
         // 쿠키 값을 가져오는 함수

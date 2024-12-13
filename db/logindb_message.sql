@@ -23,16 +23,21 @@ DROP TABLE IF EXISTS `message`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `message` (
-  `messageid` int NOT NULL AUTO_INCREMENT,
-  `roomid` int NOT NULL DEFAULT '1',
-  `postnum` int NOT NULL DEFAULT '1',
-  `send_time` datetime NOT NULL,
-  `sender` varchar(45) NOT NULL DEFAULT '1',
-  `reciper` varchar(45) NOT NULL DEFAULT '1',
-  `content` varchar(45) NOT NULL DEFAULT '1',
+  `messageid` int unsigned NOT NULL AUTO_INCREMENT,
+  `roomid` int unsigned NOT NULL,
+  `sender_id` varchar(30) NOT NULL,
+  `reciver_id` varchar(30) NOT NULL,
+  `content` text NOT NULL,
+  `send_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `report` tinyint DEFAULT NULL,
-  PRIMARY KEY (`messageid`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`messageid`),
+  KEY `roomid` (`roomid`),
+  KEY `sender_id` (`sender_id`),
+  KEY `message_ibfk_3` (`reciver_id`),
+  CONSTRAINT `message_ibfk_1` FOREIGN KEY (`roomid`) REFERENCES `message_list` (`roomid`) ON DELETE CASCADE,
+  CONSTRAINT `message_ibfk_2` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `message_ibfk_3` FOREIGN KEY (`reciver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +46,6 @@ CREATE TABLE `message` (
 
 LOCK TABLES `message` WRITE;
 /*!40000 ALTER TABLE `message` DISABLE KEYS */;
-INSERT INTO `message` VALUES (1,1,1,'2024-10-02 00:00:00','chan','1','hi',1),(2,1,1,'2024-10-02 00:01:00','june','1','hiii',NULL),(3,2,1,'2024-10-07 20:48:16','june','chan','상대방_아이디',NULL),(4,1,1,'2024-10-08 17:03:06','june','chan','안녕',NULL),(5,4,1,'2024-10-22 16:41:01','chan','','첫 번째 메시지',NULL),(6,5,1,'2024-10-22 16:42:33','june','','안녕',NULL),(7,1,1,'2024-10-23 19:23:04','june','chan','fdsafas',1);
 /*!40000 ALTER TABLE `message` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-24 20:24:37
+-- Dump completed on 2024-12-14  3:18:35

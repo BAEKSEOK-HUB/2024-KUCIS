@@ -23,13 +23,19 @@ DROP TABLE IF EXISTS `message_list`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `message_list` (
-  `roomid` int NOT NULL AUTO_INCREMENT,
-  `postnum` varchar(45) NOT NULL,
-  `sender` varchar(45) NOT NULL,
-  `reciper` varchar(45) NOT NULL,
-  `created_at` datetime NOT NULL,
-  PRIMARY KEY (`roomid`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `roomid` int unsigned NOT NULL AUTO_INCREMENT,
+  `postnum` int unsigned NOT NULL,
+  `sender_id` varchar(30) NOT NULL,
+  `reciver_id` varchar(30) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`roomid`),
+  KEY `postnum` (`postnum`),
+  KEY `sender_id` (`sender_id`),
+  KEY `message_list_ibfk_3` (`reciver_id`),
+  CONSTRAINT `message_list_ibfk_1` FOREIGN KEY (`postnum`) REFERENCES `posts` (`postnum`) ON DELETE CASCADE,
+  CONSTRAINT `message_list_ibfk_2` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `message_list_ibfk_3` FOREIGN KEY (`reciver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +44,6 @@ CREATE TABLE `message_list` (
 
 LOCK TABLES `message_list` WRITE;
 /*!40000 ALTER TABLE `message_list` DISABLE KEYS */;
-INSERT INTO `message_list` VALUES (1,'1','june','chan','2024-10-02 00:00:00'),(2,'1','chan','june','2024-10-02 00:00:00'),(3,'2','suck','chan','2024-10-02 00:00:00'),(4,'3','chan','','2024-10-22 16:40:59'),(5,'4','june','','2024-10-22 16:42:25');
 /*!40000 ALTER TABLE `message_list` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-24 20:24:37
+-- Dump completed on 2024-12-14  3:18:35

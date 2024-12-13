@@ -1,59 +1,65 @@
+"use strict";
+
 const db = require("../config/db");
 
 class MessageStorage {
-  static async saveMessageList({ postnum, sender, reciper }) {
-    return new Promise((resolve, reject) => {
-      const query = `
-            INSERT INTO message_list (postnum, sender, reciper, created_at)
-            VALUES (?, ?, ?, NOW())
-        `;
-      db.query(query, [postnum, sender, reciper], (err, result) => {
-        if (err) {
-          console.error("메시지 저장 오류:", err);
-          reject(err);
-        } else {
-          resolve({ success: true });
-        }
+  static async saveMessageList({ postnum, sender_id, reciver_id }) {
+    // sender_id와 reciver_id 값 검증
+    if (!sender_id || !reciver_id || sender_id.trim() === '' || reciver_id.trim() === '') {
+      throw new Error("Both sender_id and reciver_id are required and cannot be empty.");
+    }
+
+    const userExistsQuery = `SELECT id FROM users WHERE id IN (?, ?)`;
+    const [users] = await db.promise().query(userExistsQuery, [sender_id, reciver_id]);
+    if (users.length < 2) {
+      throw new Error("sender_id or reciver_id does not exist.");
+    }
+
+    const query = `
+      INSERT INTO message_list (postnum, sender_id, reciver_id, created_at)
+      VALUES (?, ?, ?, NOW())
+    `;
+    return db.promise()
+      .query(query, [postnum, sender_id, reciver_id])
+      .then(() => ({ success: true }))
+      .catch((err) => {
+        console.error("Error saving message list:", err);
+        throw new Error("Failed to save message list. Please check sender_id and reciver_id.");
       });
-    });
   }
 
   static async getMessagesByPostnum(postnum) {
-    return new Promise((resolve, reject) => {
-      const query = `
-            SELECT * FROM message_list WHERE postnum = ?
-        `;
-      db.query(query, [postnum], (err, results) => {
-        if (err) {
-          console.error("메시지 조회 오류:", err);
-          reject(err);
-        } else {
-          resolve(results);
-        }
-      });
-    });
+    const query = `
+      SELECT * FROM message_list WHERE postnum = ?
+    `;
+    try {
+      const [results] = await db.promise().query(query, [postnum]);
+      return results;
+    } catch (err) {
+      console.error("Error fetching messages by postnum:", err);
+      throw err;
+    }
   }
-  // 메시지를 roomid를 기준으로 조회
+
   static async getMessagesByRoomId(roomid) {
     const query = `
     SELECT 
       messageid, 
       roomid, 
-      sender, 
-      reciper, 
+      sender_id, 
+      reciver_id, 
       content, 
-      send_time,
-      report -- 'message' 테이블에서 report 가져오기
+      send_time AS created_at, -- 별칭 설정
+      report 
     FROM 
       message 
     WHERE 
       roomid = ? 
-    ORDER BY send_time ASC;
+    ORDER BY send_time ASC; -- 정렬 기준 수정
   `;
     try {
       const [messages] = await db.promise().query(query, [roomid]);
 
-      // report 값이 1인 경우 content를 "차단된 메시지입니다"로 변경
       const processedMessages = messages.map((message) => {
         if (message.report === 1) {
           message.content = "차단된 메시지입니다";
@@ -63,62 +69,57 @@ class MessageStorage {
 
       return processedMessages;
     } catch (err) {
-      console.error("메시지 조회 오류:", err);
+      console.error("Error fetching messages by room ID:", err);
       throw err;
     }
   }
 
-  // message_list에서 roomid로 reciper를 가져오는 메서드
-  static async getReciperByRoomId(roomid, currentUser) {
+  static async getReciverIdByRoomId(roomid, currentUser) {
     const query = `
-      SELECT sender, reciper
+      SELECT sender_id, reciver_id
       FROM message_list
       WHERE roomid = ?
     `;
     try {
       const [rows] = await db.promise().query(query, [roomid]);
       if (rows.length > 0) {
-        const { sender, reciper } = rows[0];
-        // 내가 sender이면 상대방이 reciper, 내가 reciper이면 상대방이 sender
-        return sender === currentUser ? reciper : sender;
+        const { sender_id, reciver_id } = rows[0];
+        return sender_id === currentUser ? reciver_id : sender_id;
       }
-      throw new Error("해당 roomid에 대한 쪽지 정보를 찾을 수 없습니다.");
+      throw new Error("No message data found for the given roomid.");
     } catch (err) {
-      console.error("reciper 조회 오류:", err);
+      console.error("Error fetching reciver_id by room ID:", err);
       throw err;
     }
   }
 
-  // 메시지를 DB에 저장하는 메서드
-  static async createMessage(roomid, postnum, sender, content) {
+  static async createMessage(roomid, postnum, sender_id, content) {
     try {
-      // 현재 roomid를 사용해 reciper 찾기
-      const reciper = await this.getReciperByRoomId(roomid, sender);
+      const reciver_id = await this.getReciverIdByRoomId(roomid, sender_id);
 
       const query = `
-        INSERT INTO message (roomid, postnum, send_time, sender, reciper, content)
+        INSERT INTO message (roomid, postnum, send_time, sender_id, reciver_id, content)
         VALUES (?, ?, NOW(), ?, ?, ?)
       `;
       const [result] = await db
         .promise()
-        .query(query, [roomid, postnum, sender, reciper, content]); // 필요한 값 전달
-      return result; // 생성된 메시지의 결과 반환
+        .query(query, [roomid, postnum, sender_id, reciver_id, content]);
+      return result;
     } catch (err) {
-      console.error("메시지 생성 오류:", err);
+      console.error("Error creating message:", err);
       throw err;
     }
   }
 
-  // 사용자의 쪽지 목록을 가져오는 메서드
   static async getMessagesForUser(userid) {
     const query = `
     SELECT 
       m.roomid, 
-      m.reciper, 
-      m.sender, 
+      m.reciver_id, 
+      m.sender_id, 
       p.title AS message_title, 
       m.created_at, 
-      msg.report -- 'message' 테이블에서 report 가져오기
+      msg.report 
     FROM 
       message_list m
     JOIN 
@@ -126,17 +127,16 @@ class MessageStorage {
     ON 
       m.postnum = p.postnum
     JOIN 
-      message msg -- 'message' 테이블과 JOIN하여 report 값 가져오기
+      message msg 
     ON 
       m.roomid = msg.roomid
     WHERE 
-      (m.sender = ? OR m.reciper = ?)
+      (m.sender_id = ? OR m.reciver_id = ?)
     ORDER BY m.created_at DESC;
   `;
     try {
       const [messages] = await db.promise().query(query, [userid, userid]);
 
-      // report 값이 1인 경우 message_title을 "차단된 메시지입니다"로 변경
       const processedMessages = messages.map((message) => {
         if (message.report === 1) {
           message.message_title = "차단된 메시지입니다";
@@ -146,7 +146,7 @@ class MessageStorage {
 
       return processedMessages;
     } catch (err) {
-      console.error("DB에서 쪽지 가져오기 오류:", err);
+      console.error("Error fetching messages for user:", err);
       throw err;
     }
   }

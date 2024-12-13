@@ -1,8 +1,8 @@
 "use strict";
 
 const id = document.querySelector("#id"),
-  psword = document.querySelector("#psword"),
-  confirmPsword = document.querySelector("#Confirm-psword"),
+  password = document.querySelector("#password"),
+  confirmpassword = document.querySelector("#Confirm-password"),
   name = document.querySelector("#name"),
   termsAgree = document.querySelector("#terms-agree"), // 이용약관 동의 체크박스
   privacyAgree = document.querySelector("#privacy-agree"), // 개인정보처리방침 동의 체크박스
@@ -14,7 +14,7 @@ function register(event) {
   event.preventDefault(); // 폼이 바로 제출되지 않도록 방지
 
   if (!id.value) return alert("아이디를 입력해주십시오.");
-  if (psword.value !== confirmPsword.value) {
+  if (password.value !== confirmpassword.value) {
     return alert("비밀번호가 일치하지 않습니다.");
   }
   if (!termsAgree.checked) {
@@ -26,7 +26,7 @@ function register(event) {
 
   const req = {
     id: id.value,
-    psword: psword.value,
+    password: password.value,
     name: name.value,
   };
 

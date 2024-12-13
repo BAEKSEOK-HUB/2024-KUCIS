@@ -35,7 +35,7 @@ class MessageExtractor {
       const csvWriter = createObjectCsvWriter({
         path: csvFilePath,
         header: [
-          { id: "sender", title: "보낸 사람" },
+          { id: "sender_id", title: "보낸 사람" },
           { id: "content", title: "내용" },
           { id: "send_time", title: "보낸 시간" },
         ],

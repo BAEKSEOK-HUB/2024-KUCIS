@@ -1,18 +1,18 @@
 "use strict";
 
 const id = document.querySelector('#id'),
-    psword = document.querySelector('#psword'),
+    password = document.querySelector('#password'),
     loginBtn = document.querySelector("#button");
 
 loginBtn.addEventListener("click", login);
 
 function login(){
     if (!id.value) return alert("아이디를 입력해주십시오.");
-    if (!psword.value) return alert("비밀번호를 입력해주십시오.");
+    if (!password.value) return alert("비밀번호를 입력해주십시오.");
 
     const req = {
         id: id.value,
-        psword: psword.value,
+        password: password.value,
     };
 
     fetch("/login", {

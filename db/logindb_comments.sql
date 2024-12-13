@@ -23,20 +23,20 @@ DROP TABLE IF EXISTS `comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comments` (
-  `commentsID` int NOT NULL AUTO_INCREMENT,
-  `answernum` int NOT NULL,
-  `comment` varchar(45) NOT NULL,
-  `del` blob,
-  `modify_regdate` datetime NOT NULL,
-  `parentnum` varchar(45) NOT NULL,
+  `commentsID` int unsigned NOT NULL AUTO_INCREMENT,
+  `postnum` int unsigned NOT NULL,
+  `user_id` varchar(30) NOT NULL,
+  `parent_id` int unsigned DEFAULT NULL,
+  `comment` varchar(255) NOT NULL,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ref` varchar(45) NOT NULL,
-  `date` datetime NOT NULL,
-  `step` varchar(45) NOT NULL,
-  `board_id` varchar(45) NOT NULL,
-  `member_id` varchar(45) NOT NULL,
   `report` tinyint DEFAULT NULL,
-  PRIMARY KEY (`commentsID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`commentsID`),
+  KEY `postnum` (`postnum`),
+  KEY `comments_ibfk_2` (`user_id`),
+  CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`postnum`) REFERENCES `posts` (`postnum`) ON DELETE CASCADE,
+  CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (1,0,'sds',NULL,'2024-10-17 13:27:00','0','1','2024-10-17 13:27:00','0','1','june',1),(2,0,'dsda',NULL,'2024-10-17 13:27:03','1','1','2024-10-17 13:27:03','0','1','june',1),(3,0,'ㄴ2ㄷㄴ3',NULL,'2024-10-17 13:38:57','0','2','2024-10-17 13:38:57','0','2','june',NULL),(4,0,'ㅇㄷ3ㅇㄷ3ㅇ',NULL,'2024-10-17 13:38:59','3','2','2024-10-17 13:38:59','0','2','june',NULL),(5,0,'ㅇ3ㅇ3ㅇㄷ',NULL,'2024-10-17 13:39:02','0','2','2024-10-17 13:39:02','0','2','june',NULL),(6,0,'fdfdf',NULL,'2024-10-23 19:23:20','0','5','2024-10-23 19:23:20','0','5','june',NULL),(7,0,'fdffd',NULL,'2024-10-23 19:23:22','0','5','2024-10-23 19:23:22','0','5','june',NULL),(8,0,'씨발',NULL,'2024-10-24 20:13:11','1','1','2024-10-24 20:13:11','0','1','chan',1);
+INSERT INTO `comments` VALUES (9,1,'chan',0,'dddd','2024-12-14 02:03:52','',0),(10,1,'chan',9,'ddd','2024-12-14 02:53:39','',NULL),(11,1,'chan',0,'dddd','2024-12-14 02:53:40','',NULL),(12,1,'chan',11,'ddddd','2024-12-14 02:53:43','',NULL);
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -58,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-24 20:24:38
+-- Dump completed on 2024-12-14  3:18:37

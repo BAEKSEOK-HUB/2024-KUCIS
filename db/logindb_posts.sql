@@ -23,14 +23,16 @@ DROP TABLE IF EXISTS `posts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `posts` (
-  `postnum` int NOT NULL AUTO_INCREMENT,
-  `id` varchar(30) NOT NULL DEFAULT 'kucis',
+  `postnum` int unsigned NOT NULL AUTO_INCREMENT,
+  `id` varchar(30) NOT NULL,
   `title` varchar(255) NOT NULL,
   `content` text NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `report` tinyint DEFAULT NULL,
-  PRIMARY KEY (`postnum`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`postnum`),
+  KEY `posts_ibfk_1` (`id`),
+  CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +41,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,'june','첫글','11111','2024-10-02 00:00:00',NULL),(6,'chan','시발','시밠발','2024-10-24 20:11:54',1);
+INSERT INTO `posts` VALUES (1,'chan','ddd','dddd','2024-12-13 23:24:40',NULL),(2,'chan','dasd','asd','2024-12-14 02:50:14',NULL);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-24 20:24:38
+-- Dump completed on 2024-12-14  3:18:36
