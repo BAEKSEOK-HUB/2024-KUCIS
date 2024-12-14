@@ -190,9 +190,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   </head>
   <body>
-    <!-- 헤더: KUCIS 로고 -->
+    <!-- 헤더: NGDB 로고 -->
     <div class="header">
-      <a href="/login" class="logo">KUCIS</a>
+      <a href="/login" class="logo">NGDB</a>
     </div>
 
     <!-- 구분선 -->
@@ -211,9 +211,6 @@
 
       <div class="form-actions">
         <!-- 스크랩, 글 목록, 삭제 버튼 -->
-        <button class="button-scrap" onclick="captureAndDownload()">
-          캡쳐
-        </button>
         <button
           onclick="sendMessage('<%= post.postnum %>', '<%= post.writer_id %>')"
           class="button-scrap"
@@ -352,23 +349,6 @@
                 alert("서버 오류가 발생했습니다.");
               });
           }
-        }
-      </script>
-      <!-- 게시글 캡처 및 다운로드 기능 -->
-      <script>
-        // 게시글을 캡처하여 이미지로 다운로드하는 함수
-        function captureAndDownload() {
-          var postElement = document.querySelector(".container"); // 캡처할 게시글 영역 선택
-          html2canvas(postElement)
-            .then(function (canvas) {
-              var link = document.createElement("a");
-              link.href = canvas.toDataURL("image/png"); // 이미지를 PNG 형식으로 변환
-              link.download = "post_capture.png"; // 다운로드될 이미지 파일 이름 설정
-              link.click(); // 이미지 다운로드 실행
-            })
-            .catch(function (error) {
-              console.error("캡처 중 오류 발생:", error);
-            });
         }
       </script>
     </div>

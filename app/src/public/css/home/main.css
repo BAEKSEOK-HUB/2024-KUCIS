@@ -2,18 +2,18 @@ body {
     font-family: 'Noto Sans KR', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #dcdcdc;
+    background-color: #6c6c6c;
 }
 
 .header {
     background-color: #333;
     padding: 22px 0;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 4px solid #ffcc00;
     position: relative;
 }
 
-.KU {
-    color: #ffcc00; 
+.NG {
+    color: #ffcc00;
     font-size: 60px;
     position: absolute;
     top: -47%;
@@ -21,21 +21,21 @@ body {
     font-weight: bold;
 }
 
-.KU a {
+.NG a {
     text-decoration: none;
 }
-.KU a:link{
+
+.NG a:link,
+.NG a:visited {
     color: #ffcc00;
 }
-.KU a:visited{
-    color: #ffcc00;
-}
-.KU a:hover{
+
+.NG a:hover {
     color: white;
 }
 
 .header h1 {
-    color: #fff;
+    color: #ffcc00;
     text-align: center;
     font-size: 30px;
     margin: 0;
@@ -56,91 +56,117 @@ nav ul li {
 nav ul li a {
     color: #fff;
     font-size: 16px;
-    transition: color 0.3s ease; /* 커서를 올렸을 때 색상 전환 시간 설정 */
+    transition: color 0.3s ease;
     text-decoration: none;
 }
 
-#button a{
+.logout a {
+    position: absolute;
+    right: 1%;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ffcc00;
     text-decoration: none;
 }
 
-
-#button a:visited{
-    color: #333;
+.logout a:hover {
+    color: #fff;
 }
 
-#button a:hover{
-    color: #9b9797;
-}
-
-#posts {
+.content {
     padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
-.post {
-    background-color: #fff;
+.profane-counts {
+    background-color: #444;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #fff;
 }
 
-.post h4 {
-    margin: 0 0 10px;
-    color: #333;
-}
-
-.post p {
-    margin: 0;
-    color: #555;
-}
-
-.post #button {
-    padding: 8px 16px;
-    width: 30px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    outline: 0;
-    margin-left: 10px;
-    background-color: #ffcc00;
+.profane-title {
+    color: #ffcc00;
+    font-size: 20px;
     font-weight: bold;
-    text-transform: uppercase;
-    cursor: pointer;
-    -webkit-transition: all 0.3 ease;
-    transition: all 0.3 ease;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 효과 전환 시간 설정 */
+    margin-bottom: 10px;
 }
 
-#button:hover {
-    background-color: #ffdd44; /* 마우스 올렸을 때 배경색 밝게 변경 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 추가 */
+.page-title {
+    color: #ffcc00;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
-#button:active {
-    background-color: #ffbb00; /* 클릭할 때 배경색을 조금 더 어둡게 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 클릭 시 그림자 줄임 */
+.profane-list,
+.profane-item-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
-#button.cancel-btn:hover {
-    background-color: #bbbbbb; /* 취소 버튼은 hover 시 연하게 */
-}
-
-#button.cancel-btn:active {
-    background-color: #999999; /* 취소 버튼 클릭 시 색상 어둡게 */
-}
-
-.message {
+.profane-table {
+    display: table;
+    width: 100%;
     margin-bottom: 20px;
 }
 
-.message p {
-    margin: 5px 0;
-    color: #555;
+.profane-row {
+    display: table-row;
+    background-color: #555;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 10px;
+    padding: 10px;
 }
 
-.message strong {
+.profane-cell {
+    display: table-cell;
+    padding: 10px;
+    vertical-align: top;
+    color: #ddd;
+}
+
+.profane-cell strong {
+    color: #ffcc00;
+    display: inline-block;
+    width: 80px; /* 레이블 너비를 일정하게 설정하여 정렬을 깔끔하게 */
+}
+
+.profane-item {
+    background-color: #555;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 15px;
+    color: #f0f0f0;
+}
+
+.profane-item strong {
+    color: #ffcc00;
+}
+
+.item-content {
+    color: #f0f0f0;
+}
+
+.profane-link {
+    display: inline-block;
+    color: #ffcc00;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.profane-link:hover {
+    background-color: #ffcc00;
     color: #333;
 }
 
@@ -149,11 +175,11 @@ nav ul li a {
     color: #f5f5f5;
     padding: 20px;
     border-radius: 8px;
-    margin-top: 160px;
+    margin-top: 20px;
 }
 
 #community-rules h3 {
-    color: #ffcc00; /* '커뮤니티 이용규칙 안내' 글자 색상을 #ffcc00으로 변경 */
+    color: #ffcc00;
     font-size: 24px;
     font-weight: bold;
 }
@@ -164,18 +190,10 @@ nav ul li a {
     margin: 10px 0;
 }
 
-.post #button:focus{
-    color: #ffbb00;
+#community-rules ul {
+    margin-left: 20px;
 }
 
-.logout a {
-    position: relative;
-    left: 95%;
-    text-decoration: none;
-    list-style-type: none;
-    color: #ffcc00;
-}
-
-.logout a:hover {
-    color: #fff;
+#community-rules ul li {
+    margin: 5px 0;
 }

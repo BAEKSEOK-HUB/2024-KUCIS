@@ -12,7 +12,7 @@
   </head>
   <body>
     <div class="header">
-      <a href="/login" class="logo">KUCIS</a>
+      <a href="/login" class="logo">NGDB</a>
     </div>
 
     <div class="separator"></div>
@@ -56,12 +56,6 @@
             class="message-input"
           />
           <button type="submit">전송</button>
-        </form>
-
-        <!-- "추출" 버튼 추가 -->
-        <form method="post" action="/message/chat/extract">
-          <input type="hidden" name="roomid" value="<%= roomid %>" />
-          <button type="submit" class="extract-button">추출</button>
         </form>
       </div>
     </div>

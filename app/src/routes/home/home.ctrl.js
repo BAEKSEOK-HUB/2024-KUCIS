@@ -7,7 +7,6 @@ const { formatTime } = require("../../public/js/home/time");
 const path = require("path");
 const fs = require("fs");
 const { createObjectCsvWriter } = require("csv-writer");
-const MessageExtractor = require("../../models/extractMessages"); // MessageExtractor를 불러옵니다.
 const CommentStorage = require("../../models/CommentStorage"); // 댓글 작성 기능
 
 const output = {
@@ -67,6 +66,22 @@ const output = {
         console.error("쪽지 생성 오류:", err); // 구체적인 오류를 콘솔에 출력
         res.status(500).send(err.message);
     }
+},
+
+deletemessagelist: async (req, res) => {
+  const { roomid } = req.params; // URL에서 roomid를 가져옴
+
+  if (!roomid) {
+    return res.status(400).send("roomid가 필요합니다.");
+  }
+
+  try {
+    const result = await MessageStorage.deletemessagelist(roomid); // MessageStorage의 메서드 호출
+    res.status(200).json(result); // 삭제 성공 시 응답
+  } catch (err) {
+    console.error("쪽지 리스트 삭제 오류:", err);
+    res.status(500).send(err.message);
+  }
 },
 
   message: async (req, res) => {
@@ -219,27 +234,21 @@ const process = {
     const { roomid, content } = req.body;
     const sender_id = req.cookies.userid; // 로그인한 사용자 ID 가져오기
 
-    // 필수 값 체크
     if (!content || !roomid || !sender_id) {
-      return res.status(400).send("메시지 내용 또는 방 ID가 누락되었습니다.");
+        return res.status(400).send("메시지 내용 또는 방 ID가 누락되었습니다.");
     }
 
     try {
-      const postnum = 1; // 현재 포스트 번호를 실제로 설정해야 합니다.
+        const report = 0; // 기본값으로 정상 메시지 처리
+        await MessageStorage.createMessage(roomid, sender_id, content, report);
 
-      // reciver_id를 message_list에서 찾기
-      const reciver_id = await MessageStorage.getReciverIdByRoomId(roomid, sender_id);
-
-      // DB에 메시지 저장
-      await MessageStorage.createMessage(roomid, postnum, sender_id, content);
-
-      // 저장 후 해당 채팅방으로 리다이렉트
-      res.redirect(`/message_chat?roomid=${roomid}`); // URL 수정: /message_chat -> /message/chat
+        res.redirect(`/message_chat?roomid=${roomid}`); // 저장 후 해당 채팅방으로 리다이렉트
     } catch (err) {
-      console.error("메시지 저장 오류:", err);
-      res.status(500).send("서버 오류 발생");
+        console.error("메시지 저장 오류:", err);
+        res.status(500).send("서버 오류 발생");
     }
   },
+
 
   extractMessages: async (req, res) => {
     const messageExtractor = new MessageExtractor(req.body); // POST 요청으로 들어온 데이터 처리
