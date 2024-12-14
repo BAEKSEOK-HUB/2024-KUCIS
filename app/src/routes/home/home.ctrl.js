@@ -234,8 +234,7 @@ const process = {
       await MessageStorage.createMessage(roomid, postnum, sender_id, content);
 
       // 저장 후 해당 채팅방으로 리다이렉트
-      res.redirect(`/message
-_chat?roomid=${roomid}`); // URL 수정: /message_chat -> /message/chat
+      res.redirect(`/message_chat?roomid=${roomid}`); // URL 수정: /message_chat -> /message/chat
     } catch (err) {
       console.error("메시지 저장 오류:", err);
       res.status(500).send("서버 오류 발생");
