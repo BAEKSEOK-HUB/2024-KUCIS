@@ -23,20 +23,20 @@ DROP TABLE IF EXISTS `comments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `comments` (
-  `commentsID` int unsigned NOT NULL AUTO_INCREMENT,
-  `postnum` int unsigned NOT NULL,
-  `user_id` varchar(30) NOT NULL,
-  `parent_id` int unsigned DEFAULT NULL,
-  `comment` varchar(255) NOT NULL,
-  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `ref` varchar(45) NOT NULL,
-  `report` tinyint DEFAULT NULL,
-  PRIMARY KEY (`commentsID`),
-  KEY `postnum` (`postnum`),
-  KEY `comments_ibfk_2` (`user_id`),
-  CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`postnum`) REFERENCES `posts` (`postnum`) ON DELETE CASCADE,
-  CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `commentsID` int unsigned NOT NULL AUTO_INCREMENT, -- 댓글 고유 ID (자동 증가)
+  `postnum` int unsigned NOT NULL, -- 댓글이 속한 게시글의 번호
+  `user_id` varchar(30) NOT NULL, -- 댓글 작성자의 사용자 ID
+  `parent_id` int unsigned DEFAULT NULL, -- 부모 댓글 ID (대댓글인 경우 연결된 부모 댓글을 참조)
+  `comment` varchar(255) NOT NULL, -- 댓글 내용
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 댓글 작성 날짜 및 시간 (기본값: 현재 시간)
+  `ref` varchar(45) NOT NULL, -- 댓글 참조 (연결 정보 등 용도로 사용)
+  `report` tinyint DEFAULT '0', -- 댓글 필터링 상태 (기본값: 0, 비속어 탐지된 텍스트 : 1)
+  PRIMARY KEY (`commentsID`), -- 기본 키 설정 (commentsID)
+  KEY `postnum` (`postnum`), -- 게시글 번호(postnum)에 대한 인덱스 생성
+  KEY `comments_ibfk_2` (`user_id`), -- 사용자 ID(user_id)에 대한 인덱스 생성
+  CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`postnum`) REFERENCES `posts` (`postnum`) ON DELETE CASCADE, -- posts 테이블의 postnum을 참조하며, 연결된 게시글이 삭제되면 댓글도 삭제됨
+  CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE -- users 테이블의 id를 참조하며, 사용자가 삭제되면 해당 댓글도 삭제됨
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (9,1,'chan',0,'dddd','2024-12-14 02:03:52','',0),(10,1,'chan',9,'ddd','2024-12-14 02:53:39','',NULL),(11,1,'chan',0,'dddd','2024-12-14 02:53:40','',NULL),(12,1,'chan',11,'ddddd','2024-12-14 02:53:43','',NULL);
+
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -58,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-14  3:18:37
+-- Dump completed on 2024-12-17 22:06:07

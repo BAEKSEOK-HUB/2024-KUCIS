@@ -23,19 +23,19 @@ DROP TABLE IF EXISTS `message_list`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `message_list` (
-  `roomid` int unsigned NOT NULL AUTO_INCREMENT,
-  `postnum` int unsigned NOT NULL,
-  `sender_id` varchar(30) NOT NULL,
-  `reciver_id` varchar(30) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`roomid`),
-  KEY `postnum` (`postnum`),
-  KEY `sender_id` (`sender_id`),
-  KEY `message_list_ibfk_3` (`reciver_id`),
-  CONSTRAINT `message_list_ibfk_1` FOREIGN KEY (`postnum`) REFERENCES `posts` (`postnum`) ON DELETE CASCADE,
-  CONSTRAINT `message_list_ibfk_2` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `message_list_ibfk_3` FOREIGN KEY (`reciver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `roomid` int unsigned NOT NULL AUTO_INCREMENT, -- 메시지 방 고유 ID (자동 증가)
+  `postnum` int unsigned NOT NULL, -- 관련된 게시글 번호
+  `sender_id` varchar(30) NOT NULL, -- 메시지를 보낸 사용자 ID
+  `reciver_id` varchar(30) NOT NULL, -- 메시지를 받은 사용자 ID
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 메시지 생성 날짜 및 시간 (기본값: 현재 시간)
+  PRIMARY KEY (`roomid`), -- 기본 키 설정 (roomid)
+  KEY `postnum` (`postnum`), -- 게시글 번호(postnum)에 대한 인덱스 생성
+  KEY `sender_id` (`sender_id`), -- 메시지 보낸 사용자 ID(sender_id)에 대한 인덱스 생성
+  KEY `message_list_ibfk_3` (`reciver_id`), -- 메시지 받은 사용자 ID(reciver_id)에 대한 인덱스 생성
+  CONSTRAINT `message_list_ibfk_1` FOREIGN KEY (`postnum`) REFERENCES `posts` (`postnum`) ON DELETE CASCADE, -- posts 테이블의 postnum을 참조하며, 관련 게시글이 삭제되면 메시지도 삭제됨
+  CONSTRAINT `message_list_ibfk_2` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE, -- users 테이블의 id를 참조하며, 보낸 사용자가 삭제되면 해당 메시지 방도 삭제됨
+  CONSTRAINT `message_list_ibfk_3` FOREIGN KEY (`reciver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE -- users 테이블의 id를 참조하며, 받은 사용자가 삭제되면 해당 메시지 방도 삭제됨
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-14  3:18:35
+-- Dump completed on 2024-12-17 22:06:05

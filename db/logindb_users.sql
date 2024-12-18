@@ -23,11 +23,11 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
-  `id` varchar(30) NOT NULL,
-  `name` varchar(30) NOT NULL,
-  `password` varchar(30) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  `id` varchar(30) NOT NULL, -- 사용자 고유 ID (최대 30자)
+  `name` varchar(30) NOT NULL, -- 사용자 이름 (최대 30자)
+  `password` varchar(30) NOT NULL, -- 사용자 비밀번호 (최대 30자)
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 계정 생성 시간 (기본값: 현재 시간)
+  PRIMARY KEY (`id`) -- 기본 키 설정 (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -37,7 +37,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('chan','이찬휘','4321','2024-12-13 23:19:27'),('june','김준영','1111','2024-12-14 02:56:02');
+INSERT INTO `users` VALUES ('root','관리자 계정','0000','2024-12-17 20:26:05');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-14  3:18:36
+-- Dump completed on 2024-12-17 22:06:07
