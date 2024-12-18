@@ -4,68 +4,83 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>채팅방</title>
-    <link rel="stylesheet" href="/css/home/message_chat.css" />
+    <link rel="stylesheet" href="/css/home/message_chat.css" /> <!-- 채팅방 전용 스타일 -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
+    /> <!-- 아이콘을 사용하기 위한 Font Awesome 연결 -->
   </head>
   <body>
+    <!-- 헤더: NGDB 로고 -->
     <div class="header">
-      <a href="/login" class="logo">NGDB</a>
+      <a href="/login" class="logo">NGDB</a> <!-- 로고 클릭 시 로그인 페이지로 이동 -->
     </div>
 
+    <!-- 구분선 -->
     <div class="separator"></div>
 
+    <!-- 채팅방 컨테이너 -->
     <div class="chat-container">
+      <!-- 뒤로가기 버튼 -->
       <div class="back-button">
         <a href="/message" class="button">
-          <i class="fas fa-arrow-left"></i>
+          <i class="fas fa-arrow-left"></i> <!-- Font Awesome 아이콘: 뒤로가기 -->
         </a>
       </div>
+
+      <!-- 채팅방 제목 -->
       <h2>채팅방 (Room ID: <%= roomid %>)</h2>
 
+      <!-- 채팅 메시지 목록 -->
       <div class="chat-messages">
-        <% if (messages.length > 0) { %> <% messages.forEach(function(message) {
-        %>
-        <div
-          class="message-container <%= message.sender_id === sender_id ? 'message-sender_id' : 'message-recipient' %>"
-        >
-          <div class="message">
-            <span><%= message.content %></span>
-            <!-- 시간 정보를 메시지 아래로 이동 -->
-            <small class="message-time">
-              <%= new Date(message.send_time).toLocaleTimeString('ko-KR', {
-              hour: '2-digit', minute: '2-digit' }) %>
-            </small>
-          </div>
-        </div>
-        <% }); %> <% } else { %>
-        <p>대화 내용이 없습니다.</p>
+        <% if (messages.length > 0) { %> <!-- 메시지가 있는 경우 -->
+          <% messages.forEach(function(message) { %> <!-- 메시지를 반복 렌더링 -->
+            <div
+              class="message-container <%= message.sender_id === sender_id ? 'message-sender_id' : 'message-recipient' %>"
+            >
+              <!-- 메시지 내용 -->
+              <div class="message">
+                <span><%= message.content %></span>
+                <!-- 메시지 시간 -->
+                <small class="message-time">
+                  <%= new Date(message.send_time).toLocaleTimeString('ko-KR', {
+                  hour: '2-digit', minute: '2-digit' }) %> <!-- 시간 형식: HH:MM -->
+                </small>
+              </div>
+            </div>
+          <% }); %>
+        <% } else { %> <!-- 메시지가 없는 경우 -->
+          <p>대화 내용이 없습니다.</p>
         <% } %>
       </div>
 
+      <!-- 메시지 입력 폼 -->
       <div class="chat-input">
-        <form method="post" action="/message/chat/send">
+        <form method="post" action="/message/chat/send"> <!-- 서버로 메시지 전송 -->
+          <!-- 채팅방 ID (숨겨진 필드) -->
           <input type="hidden" name="roomid" value="<%= roomid %>" />
-          <input
-            type="text"
-            name="content"
-            placeholder="메시지를 입력하세요..."
-            required
-            class="message-input"
+          
+          <!-- 메시지 입력 필드 -->
+          <input 
+            type="text" 
+            name="content" 
+            class="message-input" 
+            placeholder="메시지를 입력하세요..." 
+            required 
           />
-          <button type="submit">전송</button>
-        </form>
-      </div>
+    <!-- 전송 버튼 -->
+    <button type="submit" class="button-send">전송</button>
+  </form>
+</div>
+
     </div>
 
     <script>
-      // formatTime 함수 정의
+      // 시간 포맷 함수 정의
       function formatTime(dateString) {
         const date = new Date(dateString);
-        const hours = date.getHours().toString().padStart(2, "0"); // 시
-        const minutes = date.getMinutes().toString().padStart(2, "0"); // 분
+        const hours = date.getHours().toString().padStart(2, "0"); // 시(HH)
+        const minutes = date.getMinutes().toString().padStart(2, "0"); // 분(MM)
         return `${hours}:${minutes}`; // HH:MM 형식으로 반환
       }
     </script>

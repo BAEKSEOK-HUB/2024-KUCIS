@@ -5,43 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>쪽지함</title>
     <link rel="stylesheet" href="/css/home/message.css" />
-    <!-- 외부 CSS 파일을 링크 -->
+    <!-- 쪽지함 전용 CSS 파일 연결 -->
   </head>
   <body>
+    <!-- 헤더: NGDB 로고 -->
     <div class="header">
-      <a href="/login" class="logo">NGDB</a>
+      <a href="/login" class="logo">NGDB</a> <!-- 로고 클릭 시 로그인 페이지로 이동 -->
     </div>
 
+    <!-- 구분선 -->
     <div class="separator"></div>
 
+    <!-- 쪽지함 컨테이너 -->
     <div class="container">
-      <div class="form-title">내 쪽지 리스트</div>
+      <div class="form-title">내 쪽지 리스트</div> <!-- 쪽지 리스트 제목 -->
 
+      <!-- 쪽지 리스트 -->
       <ul class="message-list">
-        <% if (messages.length > 0) { %> <% messages.forEach(function(message1) {
-        %>
-        <li class="message-item">
-          <p class="message-title"><%= message1.postnum %></p>
-          <p class="message-title">보낸 사람: <%= message1.sender_id %></p>
-          <p>받는 사람: <%= message1.reciver_id %></p>
-          <p  class="message-time">보낸 시간: <%= message1.created_at %></p>
-          <!-- 쪽지 제목 -->
-          <!-- 쪽지 시간 -->
-          <div class="message-actions">
-            <!-- roomid를 쿼리 파라미터로 전달하여 message_chat으로 이동 -->
-            <form method="get" action="/message_chat">
-              <input
-                type="hidden"
-                name="roomid"
-                value="<%= message1.roomid %>"
-              />
-              <button type="submit" class="button-view">보기</button>
-            </form>
-            <button class="button-delete">삭제</button>
-          </div>
-        </li>
-        <% }); %> <% } else { %>
-        <li class="message-item">받은 쪽지가 없습니다.</li>
+        <% if (messages.length > 0) { %> <!-- 쪽지가 있는 경우 -->
+          <% messages.forEach(function(message1) { %> <!-- 각 쪽지를 순회하며 렌더링 -->
+            <li class="message-item">
+              <!-- 쪽지 상세 정보 -->
+              <p class="message-title"><%= message1.postnum %></p> <!-- 게시물 번호 -->
+              <p class="message-title">보낸 사람: <%= message1.sender_id %></p> <!-- 보낸 사람 -->
+              <p>받는 사람: <%= message1.reciver_id %></p> <!-- 받는 사람 -->
+              <p class="message-time">보낸 시간: <%= message1.created_at %></p> <!-- 보낸 시간 -->
+
+              <!-- 쪽지 액션 버튼 -->
+              <div class="message-actions">
+                <!-- 보기 버튼: roomid를 쿼리 파라미터로 전달하여 쪽지 대화로 이동 -->
+                <form method="get" action="/message_chat">
+                  <input
+                    type="hidden"
+                    name="roomid"
+                    value="<%= message1.roomid %>"
+                  />
+                  <button type="submit" class="button-view">보기</button> <!-- 쪽지 보기 버튼 -->
+                </form>
+                <button class="button-delete">삭제</button> <!-- 삭제 버튼 -->
+              </div>
+            </li>
+          <% }); %>
+        <% } else { %> <!-- 쪽지가 없는 경우 -->
+          <li class="message-item">받은 쪽지가 없습니다.</li>
         <% } %>
       </ul>
     </div>

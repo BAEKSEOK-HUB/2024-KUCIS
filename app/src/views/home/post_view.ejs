@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>게시글 보기</title>
     <style>
+      /* 전체 바디 스타일 */
       body {
         font-family: "Noto Sans KR", sans-serif;
         background-color: #333;
@@ -13,6 +14,7 @@
         color: #fff;
       }
 
+      /* 헤더 스타일 */
       .header {
         width: 100%;
         background-color: #333;
@@ -20,6 +22,7 @@
         text-align: left;
       }
 
+      /* 헤더 로고 스타일 */
       .header a.logo {
         font-size: 30px;
         color: #ffcc00;
@@ -28,11 +31,13 @@
         padding-left: 20px;
       }
 
+      /* 구분선 스타일 */
       .separator {
         border-top: 2px solid #ffcc00;
         margin-bottom: 20px;
       }
 
+      /* 게시글 컨테이너 스타일 */
       .container {
         width: 80%;
         max-width: 900px;
@@ -44,6 +49,7 @@
         position: relative;
       }
 
+      /* 게시글 제목 및 메타 스타일 */
       .post-header {
         margin-bottom: 20px;
       }
@@ -59,6 +65,7 @@
         color: #999;
       }
 
+      /* 게시글 내용 스타일 */
       .post-content {
         font-size: 18px;
         color: #ddd;
@@ -66,6 +73,7 @@
         line-height: 1.6;
       }
 
+      /* 버튼 스타일 */
       .form-actions {
         margin-top: 20px;
         display: flex;
@@ -103,7 +111,7 @@
         opacity: 0.9;
       }
 
-      /* 댓글 섹션 디자인 */
+      /* 댓글 섹션 스타일 */
       .comment-section {
         margin-top: 30px;
         padding: 20px;
@@ -111,6 +119,7 @@
         border-radius: 10px;
       }
 
+      /* 댓글 리스트 스타일 */
       .comment-list {
         list-style: none;
         padding-left: 0;
@@ -124,6 +133,7 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       }
 
+      /* 댓글 메타 정보 */
       .comment-list li .comment-meta {
         display: flex;
         justify-content: space-between;
@@ -138,7 +148,7 @@
         line-height: 1.6;
       }
 
-      /* 대댓글 스타일링 */
+      /* 대댓글 스타일 */
       .comment-list li.reply {
         margin-left: 10px;
         list-style: none;
@@ -163,8 +173,9 @@
         resize: none;
       }
 
+      /* 댓글 버튼 스타일 */
       .comment-section button {
-        padding: 4px 10px; /* 크기를 작게 조정 */
+        padding: 4px 10px;
         background-color: #ffcc00;
         color: #333;
         font-weight: bold;
@@ -173,7 +184,7 @@
         cursor: pointer;
         margin-top: 10px;
         margin-bottom: 10px;
-        margin-left: -5px; /* 왼쪽으로 이동 */
+        margin-left: -5px;
         transition: background-color 0.3s ease;
       }
 
@@ -187,10 +198,11 @@
         background-color: #e6b800;
       }
     </style>
+    <!-- HTML 캡처를 위한 외부 라이브러리 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   </head>
   <body>
-    <!-- 헤더: NGDB 로고 -->
+    <!-- 헤더 섹션 -->
     <div class="header">
       <a href="/login" class="logo">NGDB</a>
     </div>
@@ -198,19 +210,22 @@
     <!-- 구분선 -->
     <div class="separator"></div>
 
-    <!-- 게시물 내용 컨테이너 -->
+    <!-- 게시글 컨테이너 -->
     <div class="container">
       <div class="post-header">
+        <!-- 게시글 제목 -->
         <div class="post-title" id="postTitle"><%= post.title %></div>
+        <!-- 게시글 메타 정보 (작성자와 시간) -->
         <div class="post-meta">
           <%= post.id %> | <%= new Date(post.created_at).toLocaleString() %>
         </div>
       </div>
 
+      <!-- 게시글 내용 -->
       <div class="post-content" id="postContent"><%= post.content %></div>
 
+      <!-- 액션 버튼 섹션 -->
       <div class="form-actions">
-        <!-- 스크랩, 글 목록, 삭제 버튼 -->
         <button
           onclick="sendMessage('<%= post.postnum %>', '<%= post.writer_id %>')"
           class="button-scrap"
@@ -228,18 +243,20 @@
         </button>
       </div>
 
+      <!-- 댓글 섹션 -->
       <div class="comment-section">
         <h3>댓글</h3>
         <ul id="commentList" class="comment-list">
-          <% if (parentComments && parentComments.length > 0) { %> <%
-          parentComments.forEach(function(comment) { %>
-          <!-- 부모 댓글 -->
+          <% if (parentComments && parentComments.length > 0) { %> <% parentComments.forEach(function(comment) { %>
           <li class="comment">
+            <!-- 댓글 메타 정보 -->
             <div class="comment-meta">
               <strong><%= comment.user_id %></strong>
               <span><%= new Date(comment.date).toLocaleString() %></span>
             </div>
+            <!-- 댓글 내용 -->
             <div class="comment-content"><%= comment.comment %></div>
+            <!-- 대댓글 버튼 -->
             <button onclick="showReplyForm('<%= comment.commentsID %>')">
               대댓글
             </button>
@@ -263,17 +280,16 @@
               ></textarea>
               <button type="submit">대댓글 작성</button>
             </form>
-
-            <!-- 해당 댓글의 대댓글 표시 -->
             <ul>
               <% replies.forEach(function(reply) { %> <% if (reply.parent_id ==
               comment.commentsID) { %>
-              <!-- 부모 댓글과 연관된 대댓글만 표시 -->
               <li class="reply">
+                <!-- 대댓글 작성자와 시간 -->
                 <div class="comment-meta">
                   <strong><%= reply.user_id %></strong>
                   <span><%= new Date(reply.date).toLocaleString() %></span>
                 </div>
+                <!-- 대댓글 내용 -->
                 <div class="comment-content"><%= reply.comment %></div>
               </li>
               <% } %> <% }) %>
@@ -287,7 +303,6 @@
         <!-- 일반 댓글 작성 폼 -->
         <form action="/post/<%= post.postnum %>/comment" method="post">
           <input type="hidden" name="parent_id" value="0" />
-          <!-- 일반 댓글은 parent_id이 0 -->
           <textarea
             name="comment"
             placeholder="댓글을 입력하세요..."
@@ -298,38 +313,17 @@
       </div>
 
       <script>
-        // 대댓글 입력 폼을 표시하는 함수
+        // 대댓글 입력 폼 표시 함수
         function showReplyForm(commentID) {
           var form = document.getElementById("replyForm_" + commentID);
           if (form.style.display === "none" || form.style.display === "") {
-            form.style.display = "block"; // 폼을 보이게
+            form.style.display = "block";
           } else {
-            form.style.display = "none"; // 폼을 숨기게
+            form.style.display = "none";
           }
         }
-      </script>
 
-      <script>
-        function sendMessage(postnum, reciver_id) {
-          const sender_id = getCookie("userid"); // 쿠키에서 로그인한 사용자 ID를 가져옴
-          if (!sender_id) {
-            alert("로그인이 필요합니다.");
-            return;
-          }
-          // 새 경로로 이동하며, 필요한 정보를 쿼리 스트링으로 전달
-          location.href = `/message_list?postnum=${postnum}&reciver_id=${reciver_id}&sender_id=${sender_id}`;
-        }
-
-        // 쿠키 값을 가져오는 함수
-        function getCookie(name) {
-          const value = `; ${document.cookie}`;
-          const parts = value.split(`; ${name}=`);
-          if (parts.length === 2) return parts.pop().split(";").shift();
-        }
-      </script>
-
-      <script>
-        // 게시글 삭제 기능 구현
+        // 게시글 삭제 함수
         function deletePost(postId) {
           if (confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
             fetch(`/delete-post/${postId}`, {
@@ -339,7 +333,7 @@
               .then((data) => {
                 if (data.success) {
                   alert("게시글이 삭제되었습니다.");
-                  window.location.href = "/community"; // 삭제 후 게시글 목록으로 이동
+                  window.location.href = "/community";
                 } else {
                   alert("게시글 삭제에 실패했습니다.");
                 }
@@ -349,6 +343,23 @@
                 alert("서버 오류가 발생했습니다.");
               });
           }
+        }
+
+        // 쪽지 보내기 함수
+        function sendMessage(postnum, reciver_id) {
+          const sender_id = getCookie("userid");
+          if (!sender_id) {
+            alert("로그인이 필요합니다.");
+            return;
+          }
+          location.href = `/message_list?postnum=${postnum}&reciver_id=${reciver_id}&sender_id=${sender_id}`;
+        }
+
+        // 쿠키 값 가져오는 함수
+        function getCookie(name) {
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) return parts.pop().split(";").shift();
         }
       </script>
     </div>
